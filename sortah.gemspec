@@ -8,10 +8,12 @@ Gem::Specification.new do |s|
   s.authors     = ["Joe Fredette"]
   s.email       = ["jfredett@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{A gem for sortin' yah friggin' email}
+  s.description = %q{A gem for sortin' yah friggin' email}
 
   s.rubyforge_project = "sortah"
+
+  s.add_dependency "mail"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
