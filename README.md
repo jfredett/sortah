@@ -17,7 +17,6 @@ the email object passed into it will be saved. Ex:
 
     destination :spam, "spam/" 
     destination :ham, "/"
-    destination :tldr, "null/ 
 
 These are -- in essence -- simple delcarations of the structure of your sorting
 system. They may take one of several forms. The examples above are relative to
@@ -25,13 +24,14 @@ the mail directory, and will transparently manage organization south of that.
 They can also be absolute paths, eg:
 
     destination :devnull, :abs => "/dev/null"
+    destination :tldr, :devnull 
 
 which is regarded as an absolutely qualified path. It may also be a route to an
 external service, for instance, ElasticSearch, eg:
 
     destination :search_index do
       ElasticSearchMagicObject.index { :sender => email.from, :body => email.text, ... }
-      destination.devnull
+      send_to :devnull
     end
 
 Notice how the destination itself returns a "real" destination. This last type
@@ -50,7 +50,7 @@ refactored to be:
 
     destination :search_index , :lenses => [:search_hash] do
       ElasticSearchMagicObject.index email.search_hash
-      destination.devnull
+      send_to :devnull
     end
 
 - Lenses
@@ -70,6 +70,12 @@ interpreted as metadata to be used by the routers. Ex:
       email.text.split.size
     end
 
+lenses can also depend on other lenses.
+
+    lens :spam_ratio :lenses => [:spam_value, :word_count] do
+      email.spam_value / email.word_count 
+    end
+
 - Routers
 
 This is the core of the language, a router is an object which produce either a
@@ -81,16 +87,21 @@ special, the "root" router, this is the first router which gets called. To
 declare it, simply declare a router without a name. Ex:
 
     router :spam_filter, :lenses => [:spam_value] do
-      destination.spam unless email.spam_value < 10
-      destination.ham
+      if email.spam_value < 10
+        send_to :ham
+      else
+        send_to :spam 
+      end
     end
 
     router :lenses => [:word_count] do
       if email.word_count > 100 
-        destination.tldr
+        send_to :tldr
       else
-
+        send_to :spam_filter 
       end
     end
 
-Notice how execution ends as soon as a destination is returned.
+`send_to` will first search for a destination with the given name, if it cannot
+find one, it will send it search for the corresponding router.
+
