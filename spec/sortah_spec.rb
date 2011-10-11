@@ -7,5 +7,11 @@ describe Sortah::Parser do
       end
       result.should_not be_nil
     end
+    it "should store defined 'simple' destinations"  do
+      result = sortah do
+        destination :place, "somewhere/"
+      end
+      result.destinations[:place].should == ["somewhere/"]
+    end
   end
 end
