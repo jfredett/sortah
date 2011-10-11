@@ -1,5 +1,3 @@
 require "sortah/version"
+require "sortah/parser"
 
-module Sortah
-  # Your code goes here...
-end
