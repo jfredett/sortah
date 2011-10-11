@@ -4,6 +4,17 @@ module Sortah
   class Parser
     include Singleton
 
+    attr_reader :maildir
+
+    def maildir(maildir_path = nil)
+      @maildir = maildir_path if maildir_path
+      @maildir
+    end
+
+    def email
+      
+    end
+
     def clear
       @destinations = Destinations.new
     end
