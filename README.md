@@ -24,34 +24,11 @@ the mail directory, and will transparently manage organization south of that.
 They can also be absolute paths, eg:
 
     destination :devnull, :abs => "/dev/null"
+
+which is regarded as an absolutely qualified path. It may also alias another
+path:
+
     destination :tldr, :devnull 
-
-which is regarded as an absolutely qualified path. It may also be a route to an
-external service, for instance, ElasticSearch, eg:
-
-    destination :search_index do
-      ElasticSearchMagicObject.index { :sender => email.from, :body => email.text, ... }
-      send_to :devnull
-    end
-
-Notice how the destination itself returns a "real" destination. This last type
-of destination are termed "pseudodestinations" and, while they do not require
-a destination to be returned, they may optionally do so. If no destination is
-provided, then the email will not be saved. The destination may also return
-a router, which will be used to route the email afterward. 
-
-Finally, a pseudodestination may imply lenses, which will get run before the 
-destination is executed. So the ElasticSearch example from before may be 
-refactored to be:
-
-    lens :search_hash do
-      { :sender => email.from, :body => email.text, ... }
-    end
-
-    destination :search_index , :lenses => [:search_hash] do
-      ElasticSearchMagicObject.index email.search_hash
-      send_to :devnull
-    end
 
 - Lenses
 
@@ -74,6 +51,19 @@ lenses can also depend on other lenses.
 
     lens :spam_ratio :lenses => [:spam_value, :word_count] do
       email.spam_value / email.word_count 
+    end
+
+You may specify the `pass_through` option to cause the lens to not set any 
+metadata. This is useful in two cases, updating old metadata, and interaction
+(typically creational) with other services. Eg:
+
+    lens :example_update, :pass_through => true do
+      email.spam_value = 1000000 if email.sender == "annoying_guy0022493@hotmail.com"
+    end
+
+    lens :example_interaction, :pass_through => true, lenses => [:spam_value] do
+      return unless email.spam_value >= 1000000
+      HTTParty.post "http://spamblacklist.net/spammer/new", :body => email.sender
     end
 
 - Routers
@@ -105,3 +95,152 @@ declare it, simply declare a router without a name. Ex:
 `send_to` will first search for a destination with the given name, if it cannot
 find one, it will send it search for the corresponding router.
 
+## Common problems, and how to solve them:
+
+### Problem: Adding a mail to an external service, and then saving it.
+
+As a user of sortah, you want to set up filters to save all email from the
+address "searchable@somewhere.net" to the folder "foobar/", as well as register
+it with the external service "RubberBandSearch". 
+
+### Solution
+
+    destination :foobar, "foobar/"
+
+    lens :search_index , :pass_through => true do
+      #code to register the email in RubberBandSearch
+      email.indexed? = true
+    end
+
+    router :index_in_rubberband, :lenses => [:search_index] do
+      send_to :foobar
+    end
+
+    router :lenses => [:spam] do
+      send_to :devnull if email.spam? 
+      send_to :index_in_rubberband 
+    end
+
+Here we've used a `pass_through` lens to do the actual indexing, and the router
+is left as more of a proxy to call the lens. 
+
+### Problem
+
+As a user of sortah, you want to maintain a whitelist of people who should have
+their own folders, and you want those people to be subsorted in some arbitrarily 
+deep parent folders, eg:
+
+    family/ 
+      mom/
+      dad/
+      uncle_timmy/ 
+    coworkers/
+      pointy_hair/
+      dilbert/
+      old_coworkers/
+        jim/
+    personal/
+      wife/
+      friends/
+        bob/
+        mike/
+        jack/
+
+etc. Further, you'd like to only maintain the above file (or something like it), and
+not have to write new sortah code every time you move jobs or make new friends.[1]
+
+[1] Ideally, this code would maintain a directory structure for you. But as of right
+now, sortah has no aspirations to do such a thing. Each edition which _moves_ files
+in the yaml definition file will simply create new folders, it is up to the author 
+of that yaml file to keep the directory coherent with the yaml file.
+
+## Solution
+
+First, define a yaml file like the following:
+
+    family/ 
+      mom/
+      dad/
+      uncle_timmy/ 
+    coworkers/
+      pointy_hair/
+      dilbert/
+      old_coworkers/
+        jim/
+    personal/
+      wife/
+      friends/
+        bob/
+        mike/
+        jack/
+
+etc. Further, you'd like to only maintain the above file (or something like it), and
+not have to write new sortah code every time you move jobs or make new friends.[1]
+
+[1] Ideally, this code would maintain a directory structure for you. But as of right
+now, sortah has no aspirations to do such a thing. Each edition which _moves_ files
+in the yaml definition file will simply create new folders, it is up to the author 
+of that yaml file to keep the directory coherent with the yaml file.
+
+## Solution
+
+First, define a yaml file like the following:
+
+    personal: 
+      - name: wife
+        sender:
+          - pretty-lady-who-feeds-me@scary.com
+    family: 
+      - name: mom
+        sender:
+          - mom@hotmail.com
+          - mom@gmail.com
+      - name: dad
+        sender:
+          - dad@work.org
+    nested:
+      - name: example
+        reply-to: some_list@place.com
+      - deeper-nesting:
+        - name: deeper-nested-example
+        - reply-to: somewhere_else@overtherainbow.biz.co.uk
+    #...
+
+This yaml file will represent the directory structure, as well as provide information
+about how to determine whether the email is from that person or not.
+
+Next, you could define a class `Contact`, which could be built with the following methods:
+
+    class Contact
+      # ... contains a definition for 'path' -- which is built from the yaml file.
+      
+      def destination 
+        destination name, path
+      end
+
+      def wants?(email)
+        search_fields.each do |f,v|
+          return true if email[f] =~ /#{v}/
+        end
+      end
+
+      def search_fields
+        #these are the key/value pairs from the YAML file which are of the form:
+        #  email-field: content_string
+        #eg:
+        #  sender: 'me@place.net'
+        #  reply-to: 'mailing-list@majordomo.com'
+        #etc
+      end
+      # ...
+    end
+
+All of this code could be bound up in a router, eg:
+
+    router :contacts do
+      contacts = Contact.load_from_file('contacts.yml') 
+      contacts.select { |c| c.wants?(email) }.first.destination
+    end
+
+Much of this is left to pseudocode, but you can see how being able to use pure-ruby
+allows for complex routes to be expressed simply.
