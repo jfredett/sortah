@@ -1,8 +1,22 @@
 require './lib/sortah/destination'
+require 'singleton'
 module Sortah
   class Parser
-    def initialize(&block)
+    include Singleton
+
+    def clear
       @destinations = Destinations.new
+    end
+
+    def initialize
+      clear
+    end
+
+    def result
+      self.class.instance
+    end
+    
+    def handle(&block)
       self.instance_eval &block
     end
 
