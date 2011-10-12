@@ -11,6 +11,7 @@ module Sortah
     def clear
       @destinations = Destinations.new
       @lenses = Lenses.new
+      @routers = {}
     end
 
     def initialize
@@ -59,6 +60,11 @@ module Sortah
     def lens(name, opts = {}, &block)
       raise ParseErrorException if @lenses[name]
       @lenses[name] = Lens.new(name, opts, block)
+    end
+
+    def router(name = :root, opts = {}, &block)
+      raise ParseErrorException if @routers[name]
+      @routers[name] = [name, opts, block]
     end
   end
 end

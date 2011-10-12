@@ -2,16 +2,15 @@ require 'spec_helper'
 
 describe Sortah::Parser do
   context "when parsing language components, " do
-
     before :each do
       sortah.clear
     end
-
+    
     context "when parsing destinations, " do
       it "should provide an environment for definiton" do
         expect {
           sortah do
-          end
+          end 
         }.should_not raise_error
         sortah.result.should_not be_nil
       end
@@ -62,7 +61,7 @@ describe Sortah::Parser do
       end
 
       it "should throw a parse error when you try to redefine a destination" do
-        expect {
+        expect { 
           sortah do
             destination :same_dest, "dest/"
             destination :same_dest, "dest/"
@@ -78,7 +77,7 @@ describe Sortah::Parser do
         expect {
           sortah do
             lens :test_value do
-              1
+              1 
             end
           end
         }.should_not raise_error
@@ -139,6 +138,75 @@ describe Sortah::Parser do
             end
           end
         }.should_not raise_error Sortah::ParseErrorException
+      end
+
+    end
+
+    context "when parsing routers, " do
+      it "should parse a router definition" do
+        expect {
+          sortah do
+            router :test_router do
+            end
+          end
+        }.should_not raise_error
+      end
+
+      it "should parse a root-router definition" do
+        expect {
+          sortah do
+            router do
+            end
+          end
+        }.should_not raise_error
+      end
+
+      it "should parse a router with lenses" do
+        expect {
+          sortah do
+            lens :foo do
+            end
+
+            router :test_router, :lenses => [:foo] do
+            end
+          end
+        }.should_not raise_error
+      end
+
+      it "should parse a root-router with lenses" do
+        expect {
+          sortah do
+            lens :foo do
+            end
+            
+            router :lenses => [:foo] do
+            end
+          end
+        }.should_not raise_error
+      end
+
+      it "should parse a router with a forward reference to a lense" do
+        expect {
+          sortah do
+            router :foo_router, :lenses => [:foo] do
+            end
+
+            lens :foo do
+            end
+          end
+        }.should_not raise_error
+      end
+      
+      it "should parse a root-router with a forward reference to a lense" do
+        expect {
+          sortah do
+            router :lenses => [:foo] do
+            end
+
+            lens :foo do
+            end
+          end
+        }.should_not raise_error
       end
 
     end
