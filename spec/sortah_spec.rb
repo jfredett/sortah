@@ -108,8 +108,38 @@ describe Sortah::Parser do
           end
         }.should raise_error Sortah::ParseErrorException
       end
+      
+      it "should throw a parse error if you try to reference a lens which does not exist" do
+        expect {
+          sortah do
+            lens :other_name, :lenses => [:non_existant] do
+            end
+          end
+        }.should raise_error Sortah::ParseErrorException
 
-    end
+      end
+
+      it "should not throw a parse error if you try to forward-reference a lens" do
+        expect {
+          sortah do
+            lens :forward_reference, :lenses => [:ahead] do
+            end
+            lens :ahead do
+            end
+          end
+        }.should_not raise_error Sortah::ParseErrorException
+      end
+
+      it "should not throw a parse error if you have a cyclic-lens dependency" do
+        expect {
+          sortah do
+            lens :circle_one, :lenses => [:circle_two] do
+            end
+            lens :circle_two, :lenses => [:circle_one] do
+            end
+          end
+        }.should_not raise_error Sortah::ParseErrorException
+      end
 
     end
 
