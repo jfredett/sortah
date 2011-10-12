@@ -54,7 +54,6 @@ module Sortah
     end
 
     def lens(name, opts = {}, &block)
-      raise ParseErrorException if @lenses[name]
       @lenses[name] = Lens.new(name, opts, block)
     end
 

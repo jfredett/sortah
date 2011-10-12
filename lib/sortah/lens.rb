@@ -5,6 +5,7 @@ module Sortah
     end
 
     def []=(name, value)
+      raise ParseErrorException if @lenses[name]
       @lenses[name] = value
     end
 
