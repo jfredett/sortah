@@ -9,41 +9,53 @@ describe Sortah::Parser do
 
     context "when parsing destinations, " do
       it "should provide an environment for definiton" do
-        sortah do
-        end
+        expect {
+          sortah do
+          end
+        }.should_not raise_error
         sortah.result.should_not be_nil
       end
 
       it "should store defined 'simple' destinations"  do
-        sortah do
-          destination :place, "somewhere/"
-        end
+        expect {
+          sortah do
+            destination :place, "somewhere/"
+          end
+        }.should_not raise_error
         sortah.result.destinations[:place].should == "somewhere/"
       end
 
       it "should store defined 'absolute path' destinations" do
-        sortah do
-          destination :place, :abs => "/home/user/.mail/.somewhere.else/"
-        end
+        expect {
+          sortah do
+            destination :place, :abs => "/home/user/.mail/.somewhere.else/"
+          end
+        }.should_not raise_error
         sortah.result.destinations[:place].should == "/home/user/.mail/.somewhere.else/"
       end
 
       it "should store defined 'alias' destinations in a dereferenced way" do
-        sortah do
+        expect {
+          sortah do
           destination :place, "somewhere/"
           destination :other_place, :place
-        end
+          end
+        }.should_not raise_error
         sortah.result.destinations[:other_place].should == "somewhere/"
       end
 
       it "should maintain one state across multiple sortah blocks" do
-        sortah do
+        expect {
+          sortah do
           destination :place, "somewhere/"
-        end
+          end
+        }.should_not raise_error
 
-        sortah do
-          destination :new_place, :place
-        end
+        expect {
+          sortah do
+              destination :new_place, :place
+          end
+        }.should_not raise_error
 
         sortah.result.destinations[:place].should == "somewhere/"
         sortah.result.destinations[:new_place].should == "somewhere/"
@@ -63,23 +75,27 @@ describe Sortah::Parser do
     context "when parsing lenses," do
 
       it "should parse a lens definition" do
-        sortah do
-          lens :test_value do
-            1
+        expect {
+          sortah do
+            lens :test_value do
+              1
+            end
           end
-        end
+        }.should_not raise_error
       end
 
       it "should parse a lens definition that depends on another lens" do
-        sortah do
-          lens :dep do
-            1
-          end
+        expect {
+          sortah do
+            lens :dep do
+              1
+            end
 
-          lens :test_value, lenses: [:dep] do
-            2
+            lens :test_value, lenses: [:dep] do
+              2
+            end
           end
-        end
+        }.should_not raise_error
       end
 
       it "should throw a parse error if you try to define the same lens (by name) twice" do
