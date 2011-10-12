@@ -32,6 +32,7 @@ module Sortah
     end
 
     def destination(name, args)
+      raise ParseErrorException if @destinations[name]
       @destinations[name] = args 
     end
 

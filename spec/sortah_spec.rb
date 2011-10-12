@@ -48,6 +48,15 @@ describe Sortah::Parser do
         sortah.result.destinations[:place].should == "somewhere/"
         sortah.result.destinations[:new_place].should == "somewhere/"
       end
+
+      it "should throw a parse error when you try to redefine a destination" do
+        expect {
+          sortah do
+            destination :same_dest, "dest/"
+            destination :same_dest, "dest/"
+          end
+        }.should raise_error Sortah::ParseErrorException
+      end
     end
 
     it "should maintain one state across multiple sortah blocks" do
