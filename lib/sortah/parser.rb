@@ -47,14 +47,14 @@ module Sortah
       
     end
    
+    def destinations
+      @destinations
+    end
+
     ## language elements
     def destination(name, args)
       raise ParseErrorException if @destinations[name]
       @destinations[name] = args 
-    end
-
-    def destinations
-      @destinations
     end
 
     def lens(name, opts = {}, &block)
