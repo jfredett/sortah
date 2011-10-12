@@ -15,7 +15,7 @@ describe Sortah::Parser do
         sortah.result.should_not be_nil
       end
 
-      it "should store defined 'simple' destinations"  do
+      it "should parse defined 'simple' destinations"  do
         expect {
           sortah do
             destination :place, "somewhere/"
@@ -24,7 +24,7 @@ describe Sortah::Parser do
         sortah.result.destinations[:place].should == "somewhere/"
       end
 
-      it "should store defined 'absolute path' destinations" do
+      it "should parse defined 'absolute path' destinations" do
         expect {
           sortah do
             destination :place, :abs => "/home/user/.mail/.somewhere.else/"
@@ -33,31 +33,14 @@ describe Sortah::Parser do
         sortah.result.destinations[:place].should == "/home/user/.mail/.somewhere.else/"
       end
 
-      it "should store defined 'alias' destinations in a dereferenced way" do
+      it "should parse defined 'alias' destinations in a dereferenced way" do
         expect {
           sortah do
-          destination :place, "somewhere/"
-          destination :other_place, :place
+            destination :place, "somewhere/"
+            destination :other_place, :place
           end
         }.should_not raise_error
         sortah.result.destinations[:other_place].should == "somewhere/"
-      end
-
-      it "should maintain one state across multiple sortah blocks" do
-        expect {
-          sortah do
-          destination :place, "somewhere/"
-          end
-        }.should_not raise_error
-
-        expect {
-          sortah do
-              destination :new_place, :place
-          end
-        }.should_not raise_error
-
-        sortah.result.destinations[:place].should == "somewhere/"
-        sortah.result.destinations[:new_place].should == "somewhere/"
       end
 
       it "should throw a parse error when you try to redefine a destination" do
@@ -143,6 +126,7 @@ describe Sortah::Parser do
     end
 
     context "when parsing routers, " do
+
       it "should parse a router definition" do
         expect {
           sortah do
@@ -213,6 +197,23 @@ describe Sortah::Parser do
 
     context "when dealing in general with sortah, " do
 
+      it "should maintain one state across multiple sortah blocks" do
+        expect {
+          sortah do
+            destination :place, "somewhere/"
+          end
+        }.should_not raise_error
+
+        expect {
+          sortah do
+            destination :new_place, :place
+          end
+        }.should_not raise_error
+
+        sortah.result.destinations[:place].should == "somewhere/"
+        sortah.result.destinations[:new_place].should == "somewhere/"
+      end
+
       it "should allow for configuration" do
         sortah do
           maildir "/home/user/.mail" #mail directory, maildir format
@@ -229,6 +230,7 @@ describe Sortah::Parser do
       end
 
     end
+
     #acceptance criteria
     it "should parse an example sortah file, which contains all of the language elements" do
       expect { 
