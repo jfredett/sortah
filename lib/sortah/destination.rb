@@ -17,7 +17,11 @@ module Sortah
     end
 
     def []=(key, value)
+      raise ParseErrorException if @hash[key]
       @hash[key] = value
+    end
+
+    def valid?
     end
   end
 end

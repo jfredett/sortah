@@ -29,6 +29,7 @@ module Sortah
 
     def valid?
       @lenses.valid?
+      @destinations.valid?
     end
    
     # TODO: refactor the below to some modules which get
@@ -49,7 +50,6 @@ module Sortah
 
     ## language elements
     def destination(name, args)
-      raise ParseErrorException if @destinations[name]
       @destinations[name] = args 
     end
 
