@@ -81,6 +81,20 @@ describe Sortah::Parser do
           end
         end
       end
+
+      it "should throw a parse error if you try to define the same lens (by name) twice" do
+        expect {
+          sortah do
+            lens :same_name do
+            end
+            lens :same_name do
+            end
+          end
+        }.should raise_error Sortah::ParseErrorException
+      end
+
+    end
+
     end
 
     context "when dealing in general with sortah, " do

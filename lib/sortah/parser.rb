@@ -50,6 +50,8 @@ module Sortah
     end
 
     def lens(name, opts = {})
+      raise ParseErrorException if @lenses[name]
+      @lenses[name] = [name, opts]
     end
   end
 end
