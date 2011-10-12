@@ -235,6 +235,39 @@ describe Sortah::Parser do
       end
 
     end
+    #acceptance criteria
+    it "should parse an example sortah file, which contains all of the language elements" do
+      expect { 
+        sortah do
+          destination :place, "somewhere"
+          destination :devnull, :abs => "/dev/null"
+          destination :bitbucket, :devnull
 
+          lens :random_value do
+            rand
+          end
+
+          lens :random_spam_value, :lenses => [:random_value] do
+            email.random_value * 10
+          end
+
+          lens :also_depends_on_random_value, :lenses => [:random_value] do
+            email.random_value * 100
+          end
+
+          router :lenses => [:random_spam_value] do
+            if email.random_spam_value > 0.5
+              send_to :other_router
+            else
+              send_to :bitbucket
+            end
+          end
+
+          router :other_router, :lenses => [:also_depends_on_random_value] do
+            send_to :place
+          end
+        end
+      }.should_not raise_error
+    end
   end
 end
