@@ -43,10 +43,6 @@ module Sortah
       @maildir
     end
 
-    def email
-      
-    end
-   
     def destinations
       @destinations
     end

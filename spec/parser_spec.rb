@@ -213,12 +213,6 @@ describe Sortah::Parser do
 
     context "when dealing in general with sortah, " do
 
-      it "should have access to an email object" do
-        sortah do
-          email
-        end
-      end
-
       it "should allow for configuration" do
         sortah do
           maildir "/home/user/.mail" #mail directory, maildir format
