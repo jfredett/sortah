@@ -48,5 +48,8 @@ module Sortah
     def destinations
       @destinations
     end
+
+    def lens(name, opts = {})
+    end
   end
 end

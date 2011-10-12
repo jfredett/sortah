@@ -57,6 +57,30 @@ describe Sortah::Parser do
           end
         }.should raise_error Sortah::ParseErrorException
       end
+
+    end
+
+    context "when parsing lenses," do
+
+      it "should parse a lens definition" do
+        sortah do
+          lens :test_value do
+            1
+          end
+        end
+      end
+
+      it "should parse a lens definition that depends on another lens" do
+        sortah do
+          lens :dep do
+            1
+          end
+
+          lens :test_value, lenses: [:dep] do
+            2
+          end
+        end
+      end
     end
 
     context "when dealing in general with sortah, " do
