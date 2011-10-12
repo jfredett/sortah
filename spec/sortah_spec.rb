@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe Sortah::Parser do
-  context "when parsing language components" do
+  context "when parsing language components, " do
 
     before :each do
       sortah.clear
     end
 
-    context "when parsing destinations" do
+    context "when parsing destinations, " do
       it "should provide an environment for definiton" do
         sortah do
         end
@@ -59,10 +59,7 @@ describe Sortah::Parser do
       end
     end
 
-    it "should maintain one state across multiple sortah blocks" do
-      sortah do
-        destination :place, "somewhere/"
-    context "when dealing in general with sortah" do
+    context "when dealing in general with sortah, " do
 
       it "should have access to an email object" do
         sortah do
