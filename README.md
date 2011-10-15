@@ -7,7 +7,7 @@ driven development
 
 --------------------------------------------------------------------------------
 
-Sortah sort's mail. It provides a ruby (EDSL)[Embedded DSL] for manipulating
+Sortah sort's mail. It provides a ruby [EDSL](# Embedded DSL) for manipulating
 email objects. The DSL allows the definition of three principle components:
 
 - Destinations
@@ -129,34 +129,6 @@ is left as more of a proxy to call the lens.
 As a user of sortah, you want to maintain a whitelist of people who should have
 their own folders, and you want those people to be subsorted in some arbitrarily 
 deep parent folders, eg:
-
-    family/ 
-      mom/
-      dad/
-      uncle_timmy/ 
-    coworkers/
-      pointy_hair/
-      dilbert/
-      old_coworkers/
-        jim/
-    personal/
-      wife/
-      friends/
-        bob/
-        mike/
-        jack/
-
-etc. Further, you'd like to only maintain the above file (or something like it), and
-not have to write new sortah code every time you move jobs or make new friends.[1]
-
-[1] Ideally, this code would maintain a directory structure for you. But as of right
-now, sortah has no aspirations to do such a thing. Each edition which _moves_ files
-in the yaml definition file will simply create new folders, it is up to the author 
-of that yaml file to keep the directory coherent with the yaml file.
-
-## Solution
-
-First, define a yaml file like the following:
 
     family/ 
       mom/
