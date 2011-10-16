@@ -24,4 +24,23 @@ module Sortah
     def valid?
     end
   end
+
+  class Destination
+    attr_reader :name, :path
+
+    def initialize(name, path)
+      @name = name
+      @path = path
+    end
+
+    def valid?(context)
+      raise ParseErrorException if context.include?(name)
+    end
+
+    def ==(other)
+      (other.class == Destination && other.name == @name && other.path == @path) ||
+      @path == other || 
+      super
+    end
+  end
 end
