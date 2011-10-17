@@ -50,7 +50,7 @@ module Sortah
 
     ## language elements
     def destination(name, args)
-      @destinations[name] = args 
+      @destinations << Destination.new(name, args)
     end
 
     def lens(name, opts = {}, &block)

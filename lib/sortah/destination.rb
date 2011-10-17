@@ -16,9 +16,13 @@ module Sortah
       end
     end
 
-    def []=(key, value)
-      raise ParseErrorException if @hash[key]
-      @hash[key] = value
+    def <<(dest)
+      dest.valid?(@hash)
+      @hash[dest.name] = if dest.alias? 
+                           @hash[dest.path]
+                         else
+                           dest
+                         end
     end
 
     def valid?
@@ -30,7 +34,11 @@ module Sortah
 
     def initialize(name, path)
       @name = name
-      @path = path
+      @path = if path.class == Hash
+                path[:abs]
+              else
+                path
+              end
     end
 
     def valid?(context)
@@ -41,6 +49,10 @@ module Sortah
       (other.class == Destination && other.name == @name && other.path == @path) ||
       @path == other || 
       super
+    end
+
+    def alias?
+      @path.class == Symbol
     end
   end
 end
