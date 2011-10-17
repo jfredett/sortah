@@ -7,25 +7,22 @@ module Sortah
     def [](key)
       value = @hash[key]
       case value
-        when Symbol
-          @hash[value]     
-        when Hash
-          value[:abs]
-        else
-          value
+      when Symbol
+        @hash[value]     
+      when Hash
+        value[:abs]
+      else
+        value
       end
     end
 
     def <<(dest)
       dest.valid?(@hash)
-      @hash[dest.name] = if dest.alias? 
-                           @hash[dest.path]
-                         else
-                           dest
-                         end
+      @hash[dest.name] = if dest.alias? then @hash[dest.path] else dest end
     end
 
     def valid?
+      true #there is no way to construct an invalid set of destinations
     end
   end
 
@@ -34,14 +31,11 @@ module Sortah
 
     def initialize(name, path)
       @name = name
-      @path = if path.class == Hash
-                path[:abs]
-              else
-                path
-              end
+      @path = if path.class == Hash then path[:abs] else path end
     end
 
     def valid?(context)
+      #test for validity on insertion
       raise ParseErrorException if context.include?(name)
     end
 
