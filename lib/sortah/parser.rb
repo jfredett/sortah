@@ -55,7 +55,7 @@ module Sortah
     end
 
     def lens(name, opts = {}, &block)
-      @lenses[name] = Lens.new(name, opts, block)
+      @lenses << Lens.new(name, opts, block)
     end
 
     def router(name = :root, opts = {}, &block)

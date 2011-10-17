@@ -4,9 +4,10 @@ module Sortah
       @lenses = {}
     end
 
-    def []=(name, value)
-      raise ParseErrorException if @lenses[name]
-      @lenses[name] = value
+    def <<(lens)
+      #we're already using lens#valid? -- this feels like a hack
+      raise ParseErrorException unless @lenses[lens.name].nil? 
+      @lenses[lens.name] = lens
     end
 
     def [](name)
@@ -22,6 +23,8 @@ module Sortah
   end
 
   class Lens
+    attr_reader :name
+
     def initialize(name, opts = {}, block)
       @dependencies = opts[:lenses] || []
       @provides_value = opts[:pass_through]
