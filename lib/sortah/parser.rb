@@ -1,5 +1,6 @@
 require './lib/sortah/destination'
 require './lib/sortah/lens'
+require './lib/sortah/router'
 
 require 'singleton'
 module Sortah
@@ -11,7 +12,7 @@ module Sortah
     def clear
       @destinations = Destinations.new
       @lenses = Lenses.new
-      @routers = {}
+      @routers = Routers.new
     end
 
     def initialize
@@ -58,8 +59,7 @@ module Sortah
     end
 
     def router(name = :root, opts = {}, &block)
-      raise ParseErrorException if @routers[name]
-      @routers[name] = [name, opts, block]
+      @routers << Router.new(name, opts, block)
     end
   end
 end
