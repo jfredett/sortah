@@ -1,7 +1,4 @@
-require './lib/sortah/destination'
-require './lib/sortah/lens'
-require './lib/sortah/router'
-
+require 'sortah/components'
 require 'singleton'
 module Sortah
   class Parser
