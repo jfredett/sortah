@@ -169,7 +169,7 @@ describe Sortah::Parser do
         }.should_not raise_error
       end
 
-      it "should parse a router with a forward reference to a lense" do
+      it "should parse a router with a forward reference to a lens" do
         expect {
           sortah do
             router :foo_router, :lenses => [:foo] do
@@ -181,7 +181,7 @@ describe Sortah::Parser do
         }.should_not raise_error
       end
       
-      it "should parse a root-router with a forward reference to a lense" do
+      it "should parse a root-router with a forward reference to a lens" do
         expect {
           sortah do
             router :lenses => [:foo] do
