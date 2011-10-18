@@ -9,7 +9,7 @@ RSpec::Core::RakeTask.new
 desc "Generate code coverage"
 RSpec::Core::RakeTask.new(:coverage) do |t|
   t.rcov = true
-  t.rcov_opts = ['--exclude', 'spec']
+  t.rcov_opts = ['--exclude', 'spec', '--exclude', '/gems/', '--comments']
 end
 
 task :c => :console
