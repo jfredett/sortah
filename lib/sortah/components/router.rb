@@ -1,18 +1,7 @@
+require 'sortah/util/component_collection'
+
 module Sortah 
-  class Routers
-    def initialize
-      @hash = {}
-    end
-
-    def [](arg)
-      @hash[arg]    
-    end
-
-    def <<(router)
-      raise ParseErrorException unless router.valid?(@hash)
-      @hash[router.name] = router 
-    end
-    
+  class Routers < ComponentCollection
   end
 
   class Router 
@@ -24,8 +13,8 @@ module Sortah
       @block = block
     end
 
-    def valid?(context)
-      context[@name].nil?
+    def defined?(context)
+      context[@name]
     end
   end
 end
