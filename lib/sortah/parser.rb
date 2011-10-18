@@ -5,7 +5,12 @@ module Sortah
   class Parser
     include Singleton
 
+    def self.clear
+      self.instance.clear
+    end
+
     ##object-level interaction
+    attr_reader :destinations, :lenses, :routers
     
     def clear
       @destinations = Destinations.new
@@ -17,10 +22,6 @@ module Sortah
       clear
     end
 
-    def result
-      self.class.instance
-    end
-    
     def handle(&block)
       self.instance_eval &block
       valid?

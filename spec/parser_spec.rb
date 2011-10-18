@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Sortah::Parser do
   context "when parsing language components, " do
     before :each do
-      sortah.clear
+      Sortah::Parser.clear
     end
     
     context "when parsing destinations, " do
@@ -12,7 +12,7 @@ describe Sortah::Parser do
           sortah do
           end 
         }.should_not raise_error
-        sortah.result.should_not be_nil
+        sortah.should_not be_nil
       end
 
       it "should parse defined 'simple' destinations"  do
@@ -21,7 +21,7 @@ describe Sortah::Parser do
             destination :place, "somewhere/"
           end
         }.should_not raise_error
-        sortah.result.destinations[:place].should == "somewhere/"
+        sortah.destinations[:place].should == "somewhere/"
       end
 
       it "should parse defined 'absolute path' destinations" do
@@ -30,7 +30,7 @@ describe Sortah::Parser do
             destination :place, :abs => "/home/user/.mail/.somewhere.else/"
           end
         }.should_not raise_error
-        sortah.result.destinations[:place].should == "/home/user/.mail/.somewhere.else/"
+        sortah.destinations[:place].should == "/home/user/.mail/.somewhere.else/"
       end
 
       it "should parse defined 'alias' destinations in a dereferenced way" do
@@ -40,7 +40,7 @@ describe Sortah::Parser do
             destination :other_place, :place
           end
         }.should_not raise_error
-        sortah.result.destinations[:other_place].should == "somewhere/"
+        sortah.destinations[:other_place].should == "somewhere/"
       end
 
       it "should throw a parse error when you try to redefine a destination" do
@@ -134,6 +134,7 @@ describe Sortah::Parser do
             end
           end
         }.should_not raise_error
+
       end
 
       it "should parse a root-router definition" do
@@ -210,15 +211,15 @@ describe Sortah::Parser do
           end
         }.should_not raise_error
 
-        sortah.result.destinations[:place].should == "somewhere/"
-        sortah.result.destinations[:new_place].should == "somewhere/"
+        sortah.destinations[:place].should == "somewhere/"
+        sortah.destinations[:new_place].should == "somewhere/"
       end
 
       it "should allow for configuration" do
         sortah do
           maildir "/home/user/.mail" #mail directory, maildir format
         end
-        sortah.result.maildir.should == "/home/user/.mail"
+        sortah.maildir.should == "/home/user/.mail"
       end
 
       it "should use the last defined maildir" do
@@ -226,7 +227,7 @@ describe Sortah::Parser do
           maildir "/home/user/.mail/work"
           maildir "/home/user/.mail/personal"
         end
-        sortah.result.maildir.should == "/home/user/.mail/personal"
+        sortah.maildir.should == "/home/user/.mail/personal"
       end
 
     end
