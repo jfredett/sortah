@@ -28,6 +28,7 @@ module Sortah
 
     def valid?
       @lenses.valid?
+      @routers.valid?
       @destinations.valid?
     end
    
