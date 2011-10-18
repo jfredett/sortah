@@ -37,8 +37,9 @@ module Sortah
 
     ## metadata/config data
     
-    attr_reader :maildir, :destinations
+    attr_reader :destinations
 
+    #double-duty getter/setter
     def maildir(maildir_path = nil)
       @maildir = maildir_path if maildir_path
       @maildir
