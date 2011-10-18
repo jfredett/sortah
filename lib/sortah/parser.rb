@@ -1,4 +1,5 @@
 require 'sortah/components'
+
 require 'singleton'
 module Sortah
   class Parser
@@ -35,15 +36,11 @@ module Sortah
 
     ## metadata/config data
     
-    attr_reader :maildir
+    attr_reader :maildir, :destinations
 
     def maildir(maildir_path = nil)
       @maildir = maildir_path if maildir_path
       @maildir
-    end
-
-    def destinations
-      @destinations
     end
 
     ## language elements
