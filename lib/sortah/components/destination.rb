@@ -2,14 +2,10 @@ require 'sortah/util/component_collection'
 
 module Sortah
   class Destinations < ComponentCollection
-
     def [](key)
       value = self.fetch(key)
-      case value.path
-      when Symbol
-        self.fetch(value.path)     
-      when Hash
-        value[:abs]
+      if value.alias? 
+        self.fetch(value.path)
       else
         value
       end
