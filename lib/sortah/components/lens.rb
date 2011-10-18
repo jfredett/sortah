@@ -1,25 +1,7 @@
+require 'sortah/util/component_collection'
+
 module Sortah
-  class Lenses
-    def initialize
-      @lenses = {}
-    end
-
-    def <<(lens)
-      #we're already using lens#valid? -- this feels like a hack
-      raise ParseErrorException unless @lenses[lens.name].nil? 
-      @lenses[lens.name] = lens
-    end
-
-    def [](name)
-      @lenses[name]
-    end
-
-    def valid?
-      return if @lenses.empty?
-      @lenses.each_value do |lens|
-        lens.valid?(@lenses.keys)
-      end
-    end
+  class Lenses < ComponentCollection
   end
 
   class Lens
@@ -30,6 +12,10 @@ module Sortah
       @provides_value = opts[:pass_through]
       @name = name
       @definition = block
+    end
+
+    def defined?(context)
+      context.include?(@name)
     end
 
     def valid?(context)
