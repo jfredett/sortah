@@ -32,6 +32,21 @@ describe Sortah do
         TXT
       end
 
+      @reply_email = Mail.new do
+        to 'chuck@nope.com'
+        from 'jgf@somewhere.com'
+        subject "Re: Taximerdizin'"
+        reply_to 'chuck@nope.com'
+        body <<-TXT
+        > OJAI VALLEY TAXIDERMY
+        >
+        > BET YOU THOUGHT THIS EMAIL WAS REAL
+        >
+        > NOPE. CHUCK TESTA
+
+        Do you taxidermize pets? 
+        TXT
+      end
     end
 
     before :each do
