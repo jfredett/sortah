@@ -12,6 +12,10 @@ module Sortah
       self
     end
 
+    def destination
+      "foo/"
+    end
+
     private
 
     def initialize(context)

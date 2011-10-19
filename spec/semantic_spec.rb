@@ -1,6 +1,17 @@
 require 'spec_helper'
 require 'mail'
 
+#TODO: Move to spec_helper?
+def basic_sortah_definition
+  sortah do
+    maildir "/home/jfredett/.mail"
+    destination :foo, "foo/"
+    router do
+      send_to :foo
+    end
+  end
+end
+
 describe Sortah do
   context "when sorting an email" do
     before :all do
@@ -41,5 +52,14 @@ describe Sortah do
       end
       expect { sortah.sort(@email) }.should raise_error Sortah::NoRootRouterException
     end
+
+    describe "#sort" do
+      it "should return an object which responds to #destination" do
+        basic_sortah_definition
+        sortah.sort(@email).should respond_to :destination
+      end
+      
+    end
+
   end
 end
