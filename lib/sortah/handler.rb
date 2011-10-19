@@ -8,7 +8,8 @@ module Sortah
     attr_reader :destinations, :maildir
 
     def sort(email)
-    
+      raise NoRootRouterException unless @routers.has_root?    
+      self
     end
 
     private

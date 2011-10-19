@@ -20,11 +20,26 @@ describe Sortah do
           NOPE. CHUCK TESTA
         TXT
       end
+
     end
+
+    before :each do
+      Sortah::Parser.clear
+    end
+
   
     it "should provide a way to sort a single email" do
       sortah.should respond_to :sort
     end
 
+    it "should throw a sematic error when calling #sort with no root router is provided" do
+      sortah do 
+        destination :foo, "foo/"
+        router :not_root do
+          send_to :foo
+        end
+      end
+      expect { sortah.sort(@email) }.should raise_error Sortah::NoRootRouterException
+    end
   end
 end
