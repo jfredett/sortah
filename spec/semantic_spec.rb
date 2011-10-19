@@ -6,8 +6,13 @@ def basic_sortah_definition
   sortah do
     maildir "/home/jfredett/.mail"
     destination :foo, "foo/"
+    destination :bar, "bar/"
     router do
-      send_to :foo
+      if email.from.any? { |sender| sender =~ /chuck/ } 
+        send_to :foo
+      else
+        send_to :bar
+      end
     end
   end
 end
