@@ -5,18 +5,22 @@ module Sortah
       new(context)
     end
 
-    attr_reader :destinations, :maildir
-
-    def sort(email)
+    def sort(context)
+      @email = context
       raise NoRootRouterException unless @routers.has_root?    
+      self.instance_eval &@routers[:root].block
       self
     end
 
-    def destination
-      "foo/"
-    end
+    attr_reader :destinations, :destination, :maildir
 
     private
+
+    attr_reader :email
+
+    def send_to(dest)
+      @destination = destinations[dest]
+    end
 
     def initialize(context)
       @destinations = context.destinations

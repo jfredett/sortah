@@ -1,6 +1,6 @@
 module Sortah
   class Component 
-    attr_reader :name
+    attr_reader :name, :block
 
     def initialize(name, opts = {}, *potential_block) 
       @name = name

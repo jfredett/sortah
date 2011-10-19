@@ -79,6 +79,11 @@ describe Sortah do
         sortah.sort(@email).should respond_to :destination
       end
       
+      it "should sort emails based on the sortah definitions" do
+        basic_sortah_definition
+        sortah.sort(@email).destination.should == "foo/"
+        sortah.sort(@reply_email).destination.should == "bar/"
+      end
     end
 
   end
