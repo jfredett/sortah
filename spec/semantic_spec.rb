@@ -125,6 +125,48 @@ describe Sortah do
         end
         sortah.sort(@email).metadata[:senders].should == ["chuck"]
       end
+
+      it "should run dependent lenses for the non-root router, but only if the router gets called" do
+        sortah do
+          destination :foo, "foo/"
+         
+          lens :senders do
+            email.from.map { |s| s.split('@').first }
+          end
+
+          lens :never_called do
+            "This should never be called, since the router that depends on it never gets called"
+          end
+
+          router :root, :lenses => [:senders] do
+            send_to :foo
+          end
+
+          router :bar, :lenses => [:never_called] do
+            "doesn't matter what I put in here"
+          end
+        end
+        sortah.sort(@email).metadata[:never_called].should be_nil
+      end
+
+      it "should never run a lens that isn't a dependency" do
+        sortah do
+          destination :foo, "foo/"
+         
+          lens :senders do
+            email.from.map { |s| s.split('@').first }
+          end
+
+          lens :never_called do
+            "This should never be called, since the router that depends on it never gets called"
+          end
+
+          router :root, :lenses => [:senders] do
+            send_to :foo
+          end
+        end
+        sortah.sort(@email).metadata[:never_called].should be_nil
+      end
     end
   end
 end
