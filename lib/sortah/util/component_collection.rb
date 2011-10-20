@@ -14,5 +14,9 @@ module Sortah
         value.valid?(self)
       end
     end
+
+    def defined?(dest)
+      self.keys.include?(dest)
+    end
   end
 end
