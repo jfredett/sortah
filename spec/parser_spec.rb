@@ -252,7 +252,7 @@ describe Sortah::Parser do
             email.random_value * 100
           end
 
-          router :lenses => [:random_spam_value] do
+          router :root, :lenses => [:random_spam_value] do
             if email.random_spam_value > 0.5
               send_to :other_router
             else
