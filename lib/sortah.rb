@@ -6,3 +6,4 @@ require 'sortah/handler'
 require 'sortah/components'
 require 'sortah/email'
 
+require 'mail'
