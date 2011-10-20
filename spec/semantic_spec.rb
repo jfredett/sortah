@@ -84,6 +84,28 @@ describe Sortah do
         sortah.sort(@email).destination.should == "foo/"
         sortah.sort(@reply_email).destination.should == "bar/"
       end
+
+      it "should defer to a second router if it is sent to one" do
+        sortah do
+          destination :foo, "foo/"
+          destination :bar, "bar/"
+          
+          router do
+            if email.from.any? { |sender| sender =~ /chuck/ }
+              send_to :foo
+            else
+              send_to :secondary_router
+            end
+          end
+
+          router :secondary_router do
+            send_to :bar
+          end
+        end
+        
+        sortah.sort(@email).destination.should == "foo/"
+        sortah.sort(@reply_email).destination.should == "bar/"
+      end
     end
 
   end

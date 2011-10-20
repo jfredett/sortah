@@ -6,9 +6,14 @@ module Sortah
     end
 
     def sort(context)
-      @email = context
       raise NoRootRouterException unless @routers.has_root?    
-      self.instance_eval &@routers[:root].block
+      @router = routers[:root]
+      @email = context
+      
+      until @found_destination
+        self.instance_eval &@router.block
+      end
+
       self
     end
 
@@ -16,10 +21,16 @@ module Sortah
 
     private
 
-    attr_reader :email
+    attr_reader :email, :routers
 
     def send_to(dest)
-      @destination = destinations[dest]
+      if destinations.defined?(dest)
+        @destination = destinations[dest]
+        @found_destination = true 
+      else
+        @router = routers[dest]
+      end
+      @destination
     end
 
     def initialize(context)
