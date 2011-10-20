@@ -8,7 +8,7 @@ module Sortah
     def sort(context)
       raise NoRootRouterException unless @routers.has_root?    
       @router = routers[:root]
-      @email = context
+      @email = Sortah::Email.wrap(context)
       
       until @found_destination
         if @router.has_lens?
