@@ -7,32 +7,30 @@ module Sortah
 
     def sort(context)
       raise NoRootRouterException unless @routers.has_root?    
+      
       @router = routers[:root]
       @email = Sortah::Email.wrap(context)
       
       until @found_destination
-        @email.metadata = @metadata
-        if @router.has_lens?
-          @router.lenses.each do |lens|
-            run(lens) 
-          end
-        end
-        self.instance_eval &@router.block
+        @router.run_lenses!(email, lenses)
+        run!(@router.block) #updates @router via a `send_to` call
       end
       self
     end
 
-    attr_reader :destinations, :destination, :maildir, :metadata
+    attr_reader :destinations, :destination, :maildir
+
+    def metadata(key)
+      email.send(key)
+    end
 
     private
 
-    attr_reader :email, :routers
-    
-    def run(key)
-      return unless @metadata[key].nil?
-      @metadata[key] ||= self.instance_eval &@lenses[key].block 
-    end
+    attr_reader :email, :lenses, :routers
 
+    def run!(block)
+      self.instance_eval &block
+    end
 
     def send_to(dest)
       if destinations.defined?(dest)
@@ -49,7 +47,6 @@ module Sortah
       @lenses = context.lenses
       @routers = context.routers
       @maildir = context.maildir
-      @metadata = {}
     end
   end
 end

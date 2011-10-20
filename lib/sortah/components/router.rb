@@ -9,12 +9,15 @@ module Sortah
   end
 
   class Router < Component 
-    def has_lens?
-      !@opts[:lenses].nil?
+
+    def run_lenses!(email, context)
+      lenses.each { |l| context[l].run!(email) }
     end
 
+    private
+
     def lenses
-      @opts[:lenses]
+      @opts[:lenses] || []
     end
   end
 end

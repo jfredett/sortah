@@ -19,5 +19,9 @@ module Sortah
         raise ParseErrorException unless context.include? lens
       end
     end
+
+    def run!(context)
+      context.set_metadata(name, block)
+    end
   end
 end
