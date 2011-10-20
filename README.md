@@ -84,7 +84,7 @@ declare it, simply declare a router without a name. Ex:
       end
     end
 
-    router :lenses => [:word_count] do
+    router :root, :lenses => [:word_count] do
       if email.word_count > 100 
         send_to :tldr
       else
@@ -94,6 +94,8 @@ declare it, simply declare a router without a name. Ex:
 
 `send_to` will first search for a destination with the given name, if it cannot
 find one, it will send it search for the corresponding router.
+
+when defining a root router with lenses, you must specify ":root" as the title.
 
 ## Common problems, and how to solve them:
 
