@@ -11,6 +11,7 @@ module Sortah
       @email = Sortah::Email.wrap(context)
       
       until @found_destination
+        @email.metadata = @metadata
         if @router.has_lens?
           @router.lenses.each do |lens|
             run(lens) 
