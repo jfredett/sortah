@@ -9,5 +9,12 @@ module Sortah
   end
 
   class Router < Component 
+    def has_lens?
+      !@opts[:lenses].nil?
+    end
+
+    def lenses
+      @opts[:lenses]
+    end
   end
 end

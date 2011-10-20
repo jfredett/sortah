@@ -58,7 +58,6 @@ describe Sortah do
       Sortah::Parser.clear
     end
 
-  
     it "should provide a way to sort a single email" do
       sortah.should respond_to :sort
     end
@@ -77,6 +76,11 @@ describe Sortah do
       it "should return an object which responds to #destination" do
         basic_sortah_definition
         sortah.sort(@email).should respond_to :destination
+      end
+
+      it "should return an object which responds to #metadata" do
+        basic_sortah_definition
+        sortah.sort(@email).should respond_to :metadata
       end
       
       it "should sort emails based on the sortah definitions" do
@@ -106,7 +110,21 @@ describe Sortah do
         sortah.sort(@email).destination.should == "foo/"
         sortah.sort(@reply_email).destination.should == "bar/"
       end
-    end
 
+      it "should run dependent lenses for the root router" do
+        sortah do
+          destination :foo, "foo/"
+         
+          lens :senders do
+            email.from.map { |s| s.split('@').first }
+          end
+
+          router :root, :lenses => [:senders] do
+            send_to :foo
+          end
+        end
+        sortah.sort(@email).metadata[:senders].should == ["chuck"]
+      end
+    end
   end
 end

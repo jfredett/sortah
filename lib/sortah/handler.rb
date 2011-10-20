@@ -11,17 +11,27 @@ module Sortah
       @email = context
       
       until @found_destination
+        if @router.has_lens?
+          @router.lenses.each do |lens|
+            run(lens) 
+          end
+        end
         self.instance_eval &@router.block
       end
-
       self
     end
 
-    attr_reader :destinations, :destination, :maildir
+    attr_reader :destinations, :destination, :maildir, :metadata
 
     private
 
     attr_reader :email, :routers
+    
+    def run(key)
+      return unless @metadata[key].nil?
+      @metadata[key] ||= self.instance_eval &@lenses[key].block 
+    end
+
 
     def send_to(dest)
       if destinations.defined?(dest)
@@ -38,6 +48,7 @@ module Sortah
       @lenses = context.lenses
       @routers = context.routers
       @maildir = context.maildir
+      @metadata = {}
     end
   end
 end
