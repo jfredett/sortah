@@ -4,7 +4,6 @@ source "http://rubygems.org"
 gem 'ruby-debug19', :require => 'rubydebug'
 gem 'rspec'
 gem 'rake'
-gem 'rcov'
 
 # Specify your gem's dependencies in sortah.gemspec
 gemspec
