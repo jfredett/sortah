@@ -1,7 +1,5 @@
 module Sortah
   class Email 
-    attr_accessor :metadata
-
     def self.wrap(context, metadata = {})
       Email.new(context, metadata)
     end

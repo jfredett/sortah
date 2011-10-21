@@ -9,9 +9,5 @@ describe Sortah::Email do
       @email.should respond_to method
     end
   end
-  
-  it "should have updatable metadata" do
-    @email.should respond_to :metadata=
-  end
 end
 
