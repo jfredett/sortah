@@ -12,7 +12,7 @@ module Sortah
       elsif @mail.respond_to?(meth)
         @mail.send(meth) #access only, no setting
       elsif metadata.keys.include?(meth)
-        @metadata[meth]
+        @metadata[meth] unless @metadata[meth] == :pass_through
       end
     end
 
@@ -22,11 +22,12 @@ module Sortah
     end
 
     def process(lens)
+      return unless @metadata[lens.name].nil?
       if lens.provides_value? 
-        return unless @metadata[lens.name].nil?
         @metadata[lens.name] = self.instance_eval &lens.block 
       else 
         self.instance_eval &lens.block
+        @metadata[lens.name] = :pass_through
       end
     end
 

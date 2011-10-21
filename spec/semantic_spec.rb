@@ -258,6 +258,28 @@ describe Sortah do
         end
         sortah.sort(@email).metadata(:passthrough).should be_nil
       end
+
+      it "should not run a pass_through lens more than once" do
+        $count = 0
+        sortah do
+          destination :foo, "foo/"
+         
+          lens :passthrough, :pass_through => true do
+            $count += 1
+          end
+
+          router :root, :lenses => [:passthrough] do
+            send_to :baz
+          end
+
+          router :baz, :lenses => [:passthrough] do
+            send_to :foo
+          end
+        end
+        sortah.sort(@email)
+        $count.should == 1
+      end
+      $count = nil
     end
   end
 end
