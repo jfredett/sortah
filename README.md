@@ -118,9 +118,12 @@ it with the external service "RubberBandSearch".
       send_to :foobar
     end
 
-    router :lenses => [:spam] do
-      send_to :devnull if email.spam? 
-      send_to :index_in_rubberband 
+    router :lenses => [:spam?] do
+      if email.spam? 
+        send_to :devnull 
+      else 
+        send_to :index_in_rubberband 
+      end
     end
 
 Here we've used a `pass_through` lens to do the actual indexing, and the router
