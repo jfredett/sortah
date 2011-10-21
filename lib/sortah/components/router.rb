@@ -9,15 +9,8 @@ module Sortah
   end
 
   class Router < Component 
-
-    def run_lenses!(email, context)
-      lenses.each { |l| context[l].run!(email, context) }
-    end
-
-    private
-
-    def lenses
-      @opts[:lenses] || []
+    def run_dependencies!(email, context)
+      dependencies(context).each { |l| l.run!(email, context) }
     end
   end
 end

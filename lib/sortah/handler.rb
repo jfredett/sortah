@@ -12,7 +12,7 @@ module Sortah
       @email = Sortah::Email.wrap(context)
       
       until @found_destination
-        @router.run_lenses!(email, lenses)
+        @router.run_dependencies!(email, lenses)
         run!(@router.block) #updates @router via a `send_to` call
       end
       self

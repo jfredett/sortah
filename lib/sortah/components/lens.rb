@@ -6,9 +6,6 @@ module Sortah
   end
 
   class Lens < Component
-    def dependencies
-      @opts[:lenses] || []
-    end
 
     def provides_value? 
       !@opts[:pass_through]
@@ -21,7 +18,7 @@ module Sortah
     end
 
     def run!(email, context)
-      dependencies.each { |l| context[l].run!(email, context) }
+      dependencies(context).each { |l| l.run!(email, context) }
       email.process(self)
     end
   end

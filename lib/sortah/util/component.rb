@@ -11,6 +11,14 @@ module Sortah
     def defined?(context)
       !!context[name]
     end
+
+    protected 
+
+    def dependencies(context = nil)
+      lenses = (@opts[:lenses] || [])
+      return lenses if context.nil?
+      lenses.map { |l| context[l] }
+    end
   end
   
 end
