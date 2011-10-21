@@ -20,8 +20,9 @@ module Sortah
       end
     end
 
-    def run!(context)
-      context.set_metadata(name, block)
+    def run!(email, context)
+      dependencies.each { |l| context[l].run!(email, context) }
+      email.set_metadata(name, block)
     end
   end
 end

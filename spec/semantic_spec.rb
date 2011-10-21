@@ -193,6 +193,30 @@ describe Sortah do
         sortah.sort(@reply_email).destination.should == "bar/"
       end
 
+      it "should run subdependencies of lenses" do
+        sortah do
+          destination :foo, "foo/"
+          destination :bar, "bar/"
+         
+          lens :senders, :lenses => [:sub_dep] do
+            email.from.map { |s| s.split('@').first }
+          end
+
+          lens :sub_dep do
+            "Sub Dep Ran"
+          end
+
+          router :root, :lenses => [:senders] do
+            if email.senders.include? "chuck"
+              send_to :foo
+            else
+              send_to :bar
+            end
+          end
+        end
+        sortah.sort(@email).metadata(:sub_dep).should == "Sub Dep Ran"
+      end
+
     end
   end
 end

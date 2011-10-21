@@ -11,7 +11,7 @@ module Sortah
   class Router < Component 
 
     def run_lenses!(email, context)
-      lenses.each { |l| context[l].run!(email) }
+      lenses.each { |l| context[l].run!(email, context) }
     end
 
     private
