@@ -11,7 +11,7 @@ module Sortah
     end
 
     def provides_value? 
-      !!@opts[:pass_through]
+      !@opts[:pass_through]
     end
 
     def valid?(context)
@@ -22,7 +22,7 @@ module Sortah
 
     def run!(email, context)
       dependencies.each { |l| context[l].run!(email, context) }
-      email.set_metadata(name, block)
+      email.process(self)
     end
   end
 end

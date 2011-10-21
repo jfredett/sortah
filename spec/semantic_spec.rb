@@ -240,6 +240,24 @@ describe Sortah do
         $count = nil #undefine $count
       end
 
+      it "should not set any metadata for a :pass_through lens" do
+        sortah do
+          destination :foo, "foo/"
+         
+          lens :passthrough, :pass_through => true do
+            "some external service call"
+          end
+
+          router :root, :lenses => [:passthrough] do
+            send_to :baz
+          end
+
+          router :baz, :lenses => [:passthrough] do
+            send_to :foo
+          end
+        end
+        sortah.sort(@email).metadata(:passthrough).should be_nil
+      end
     end
   end
 end

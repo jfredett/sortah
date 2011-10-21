@@ -21,12 +21,17 @@ module Sortah
       base_respond_to?(meth) || @mail.respond_to?(meth)
     end
 
-    def set_metadata(key, block)
-      return unless @metadata[key].nil?
-      @metadata[key] = self.instance_eval &block 
+    def process(lens)
+      if lens.provides_value? 
+        return unless @metadata[lens.name].nil?
+        @metadata[lens.name] = self.instance_eval &lens.block 
+      else 
+        self.instance_eval &lens.block
+      end
     end
 
     private
+
     def email
       self 
     end
