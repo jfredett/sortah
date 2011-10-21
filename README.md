@@ -2,6 +2,12 @@
 
 ##For sortin' your friggin' mail.
 
+--------------------------------------------------------------------------------
+
+[![Build Status](https://secure.travis-ci.org/jfredett/sortah.png)](http://travis-ci.org/jfredett/sortah)
+
+--------------------------------------------------------------------------------
+
 This readme is presently comprised of lies and wishes. It's all part of README
 driven development
 
