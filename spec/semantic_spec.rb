@@ -217,6 +217,29 @@ describe Sortah do
         sortah.sort(@email).metadata(:sub_dep).should == "Sub Dep Ran"
       end
 
+      it "should not run the same lens twice" do
+        $count = 0 #evil, pure evil
+        sortah do
+          destination :bar, "bar/"
+         
+          lens :inc do
+            $count += 1
+          end
+
+          router :root, :lenses => [:inc] do
+            send_to :baz
+          end
+
+          router :baz, :lenses => [:inc] do
+            send_to :bar
+          end
+        end
+
+        sortah.sort(@email).metadata(:inc).should == 1
+
+        $count = nil #undefine $count
+      end
+
     end
   end
 end
