@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "sortah"
 
   s.add_dependency "mail"
+  s.add_dependency "trollop"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
