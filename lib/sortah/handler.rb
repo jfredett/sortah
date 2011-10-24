@@ -8,40 +8,21 @@ module Sortah
     def sort(context)
       raise NoRootRouterException unless @routers.has_root?    
       clear_state!
-      
-      @router = routers[:root]
-      @email = Sortah::Email.wrap(context)
-      
-      until @found_destination
-        @router.run_dependencies!(email, lenses)
-        run!(@router.block) #updates @router via a `send_to` call
-      end
+      @result = CleanRoom.sort(context, self)
       self
     end
 
-    attr_reader :destinations, :destination, :maildir
+    attr_reader :destinations, :lenses, :routers, :maildir
 
     def metadata(key)
-      email.send(key)
+      @result.metadata(key)
+    end
+
+    def destination
+      @result.destination
     end
 
     private
-
-    attr_reader :email, :lenses, :routers
-
-    def run!(block)
-      self.instance_eval &block
-    end
-
-    def send_to(dest)
-      if destinations.defined?(dest)
-        @destination = destinations[dest]
-        @found_destination = true 
-      else
-        @router = routers[dest]
-      end
-      @destination
-    end
 
     def clear_state! 
       @lenses.clear_state!
