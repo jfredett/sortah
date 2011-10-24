@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+require 'trollop'
+
+
+opts = Trollop::options do
+  opt :"dry-run", "Do not execute any changes" 
+end
+
+puts "Dry-run mode" if opts[:"dry-run"]
