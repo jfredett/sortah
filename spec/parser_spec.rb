@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Sortah::Parser do
   context "when parsing language components, " do
     before :each do
-      Sortah::Parser.clear
+      Sortah::Parser.clear!
     end
     
     context "when parsing destinations, " do

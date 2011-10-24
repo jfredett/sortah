@@ -7,6 +7,7 @@ module Sortah
 
     def sort(context)
       raise NoRootRouterException unless @routers.has_root?    
+      clear_state!
       
       @router = routers[:root]
       @email = Sortah::Email.wrap(context)
@@ -40,6 +41,10 @@ module Sortah
         @router = routers[dest]
       end
       @destination
+    end
+
+    def clear_state! 
+      @lenses.clear_state!
     end
 
     def initialize(context)

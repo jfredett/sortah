@@ -5,21 +5,21 @@ module Sortah
   class Parser
     include Singleton
 
-    def self.clear
-      self.instance.clear
+    def self.clear!
+      self.instance.clear!
     end
 
     ##object-level interaction
     attr_reader :destinations, :lenses, :routers
     
-    def clear
+    def clear!
       @destinations = Destinations.new
       @lenses = Lenses.new
       @routers = Routers.new
     end
 
     def initialize
-      clear
+      clear!
     end
 
     def handle(&block)
@@ -33,12 +33,7 @@ module Sortah
       @destinations.valid?
     end
    
-    # TODO: refactor the below to some modules which get
-    # mixed in -- Sortah::Language::{Config,Elements}
-
     ## metadata/config data
-    
-    attr_reader :destinations
 
     #double-duty getter/setter
     def maildir(maildir_path = nil)

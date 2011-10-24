@@ -55,7 +55,7 @@ describe Sortah do
     end
 
     before :each do
-      Sortah::Parser.clear
+      Sortah::Parser.clear!
     end
 
     it "should provide a way to sort a single email" do
