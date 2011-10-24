@@ -9,7 +9,7 @@ module Sortah
     end
 
     def run_dependencies!(email, context)
-      dependencies(context).each { |l| l.run!(email, context) }
+      dependencies(context).each { |lens| lens.run!(email, context) }
     end
 
     def defined?(context)
@@ -21,7 +21,7 @@ module Sortah
     def dependencies(context = nil)
       lenses = (@opts[:lenses] || [])
       return lenses if context.nil?
-      lenses.map { |l| context[l] }
+      lenses.map { |lens| context[lens] }
     end
   end
   
