@@ -279,7 +279,6 @@ describe Sortah do
         sortah.sort(@email)
         $count.should == 1
       end
-      $count = nil
     end
   end
 end
