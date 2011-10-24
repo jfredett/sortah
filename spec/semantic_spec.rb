@@ -279,6 +279,18 @@ describe Sortah do
         sortah.sort(@email)
         $count.should == 1
       end
+
+      it "should execute only until the first #send_to call" do
+        sortah do 
+          destination :foo, "foo/"
+          router do
+            send_to :foo
+            throw Exception
+          end
+        end
+        expect { sortah.sort(@email) }.should_not raise_error Exception
+        sortah.sort(@email).destination.should == "foo/"
+      end
     end
   end
 end

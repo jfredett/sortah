@@ -1,4 +1,9 @@
 module Sortah
+
+  class FinishedExecution < Exception
+  end
+  
+  
   class CleanRoom < BasicObject
     def self.sort(email, context)
       new(email, context).sort
@@ -6,7 +11,7 @@ module Sortah
 
     def sort
       until @pointer.is_a?(Destination) do
-        run!(@pointer) 
+        run!(@pointer) rescue FinishedExecution
       end 
       self
     end
@@ -30,6 +35,7 @@ module Sortah
 
     def send_to(dest)
       @pointer = @__context__.routers[dest] || @__context__.destinations[dest]
+      throw FinishedExecution
     end
 
     def initialize(email, context)
