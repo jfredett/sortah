@@ -1,0 +1,8 @@
+sortah do
+  maildir '/tmp/.mail/'
+  destination :foo, 'foo/'
+
+  router do
+    send_to :foo
+  end
+end

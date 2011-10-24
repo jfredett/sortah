@@ -1,11 +1,13 @@
 def run_with(arg, email = "")
-   cmd =<<-CMD
-   bin/sortah #{arg} <<-EMAIL
-   #{email}
-   EMAIL
+  #uses the sortah defn in spec/fixtures/rc
+  cmd =<<-CMD
+bundle exec bin/sortah #{arg} --rc "spec/fixtures/rc" <<-EMAIL
+#{email}
+EMAIL
 CMD
-   result = `#{cmd}`
-   { result: result, status: $? }
+  result = `#{cmd}`
+
+  { result: result, status: $?.to_i }
 end
 
 
@@ -29,6 +31,9 @@ describe "the sortah executable" do
     end
   end
 
+  before :each do
+    Sortah::Parser.clear!
+  end
 
   context "when executing in dry-run mode, " do
     it "should have a dry-run mode" do
@@ -36,16 +41,14 @@ describe "the sortah executable" do
       cmd[:result].should =~ /Dry-run mode/
       cmd[:status].should == 0
     end
+
     it "should not write any files when in dry-run mode" do
-      `mkdir -p '/tmp/mail'`
-      sortah do
-        destination :foo, :abs => "/tmp/mail"
-        router do
-          send_to :foo
-        end
-      end
       run_with('--dry-run', @email.to_s)
       Dir['/tmp/mail/*'].size.should == 0
+    end
+
+    it "should print to STDOUT the location it intends to write the file" do
+      run_with('--dry-run', @email.to_s)[:result].should =~ %r|writing email to: /tmp/\.mail/foo/|
     end
   end
 end

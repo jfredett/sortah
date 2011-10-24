@@ -1,9 +1,30 @@
 #!/usr/bin/env ruby
 require 'trollop'
-
+require 'sortah'
+require 'digest/sha1'
 
 opts = Trollop::options do
+  banner 'Sortah'
+  opt :rc, "path to your sortah files", :default => "#{ENV['HOME']}/.sortahrc"
   opt :"dry-run", "Do not execute any changes" 
+  opt :verbose  , "Increase verbosity"
 end
 
 puts "Dry-run mode" if opts[:"dry-run"]
+
+puts "Reading mail" if opts[:verbose]
+email = Mail.new do
+  body ARGF.read
+end
+
+load File.expand_path(opts[:rc])
+
+dest = sortah.sort(email).full_destination
+puts "writing email to: #{dest}" if opts[:"dry-run"] || opts[:verbose]
+exit 0 if opts[:"dry-run"]
+
+File.open("#{dest}/#{Digest::SHA1.hexdigest(email.to_s)}.eml", 'w') do |f|
+  f << email.to_s
+end
+puts "wrote file to #{dest}" if opts[:verbose]
+
