@@ -7,9 +7,17 @@ Gem::Specification.new do |s|
   s.version     = Sortah::VERSION
   s.authors     = ["Joe Fredette"]
   s.email       = ["jfredett@gmail.com"]
-  s.homepage    = ""
-  s.summary     = %q{A gem for sortin' yah friggin' email}
-  s.description = %q{A gem for sortin' yah friggin' email}
+  s.homepage    = "http://www.github.com/jfredett/sortah"
+  s.summary     = %q{For sortin' your email}
+  s.description = %q{
+    Sortah provides a simple, declarative internal DSL for sorting 
+    your email. It provides an executable which may serve as an external
+    mail delivery agent for such programs as `getmail`. Finally, since
+    your sorting logic is just Plain Old Ruby Code (PORC, as I like to call it).
+    You have access to 100% of ruby as needed, including all of it's 
+    object oriented goodness, it's wonderful community of gems, and it's 
+    powerful metaprogramming ability.
+  }
 
   s.rubyforge_project = "sortah"
 
