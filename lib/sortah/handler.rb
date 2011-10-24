@@ -44,9 +44,9 @@ module Sortah
 
     def initialize(context)
       @destinations = context.destinations
-      @lenses = context.lenses
-      @routers = context.routers
-      @maildir = context.maildir
+      @lenses       = context.lenses
+      @routers      = context.routers
+      @maildir      = context.maildir
     end
   end
 end
