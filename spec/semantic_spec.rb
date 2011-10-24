@@ -291,6 +291,20 @@ describe Sortah do
         expect { sortah.sort(@email) }.should_not raise_error Exception
         sortah.sort(@email).destination.should == "foo/"
       end
+
+      describe "#full_destination" do
+        it "should return the full path (including the maildir basepath) to which an email will be routed" do
+          sortah do 
+            maildir '/tmp/'
+            destination :foo, "foo/"
+            router do
+              send_to :foo
+            end
+          end
+          sortah.sort(@email).full_destination.should == "/tmp/foo/"
+          
+        end
+      end
     end
   end
 end

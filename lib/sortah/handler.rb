@@ -22,6 +22,10 @@ module Sortah
       @result.destination
     end
 
+    def full_destination
+      maildir + destination.to_s
+    end
+
     private
 
     def clear_state! 

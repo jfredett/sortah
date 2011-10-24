@@ -33,5 +33,9 @@ module Sortah
       @path == other || 
       super
     end
+
+    def to_s
+      @path
+    end
   end
 end
