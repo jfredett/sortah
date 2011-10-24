@@ -8,11 +8,6 @@
 
 --------------------------------------------------------------------------------
 
-This readme is presently comprised of lies and wishes. It's all part of README
-driven development
-
---------------------------------------------------------------------------------
-
 Sortah sort's mail. It provides a ruby [EDSL](# Embedded DSL) for manipulating
 email objects. The DSL allows the definition of three principle components:
 
@@ -83,23 +78,20 @@ special, the "root" router, this is the first router which gets called. To
 declare it, simply declare a router without a name. Ex:
 
     router :spam_filter, :lenses => [:spam_value] do
-      if email.spam_value < 10
-        send_to :ham
-      else
-        send_to :spam 
-      end
+      send_to :ham if email.spam_value < 10
+      send_to :spam 
     end
 
     router :root, :lenses => [:word_count] do
-      if email.word_count > 100 
-        send_to :tldr
-      else
-        send_to :spam_filter 
-      end
+      send_to :tldr if email.word_count > 100 
+      send_to :spam_filter 
     end
 
 `send_to` will first search for a destination with the given name, if it cannot
-find one, it will send it search for the corresponding router.
+find one, it will send it search for the corresponding router. It also acts as
+`return` -- halting execution of the block when it is called. This is
+implemented via an exception, which means it _may_ cause performance issues on
+things like the JVM, YMMV.
 
 when defining a root router with lenses, you must specify ":root" as the title.
 
@@ -125,11 +117,8 @@ it with the external service "RubberBandSearch".
     end
 
     router :lenses => [:spam?] do
-      if email.spam? 
-        send_to :devnull 
-      else 
-        send_to :index_in_rubberband 
-      end
+      send_to :devnull if email.spam? 
+      send_to :index_in_rubberband 
     end
 
 Here we've used a `pass_through` lens to do the actual indexing, and the router
@@ -202,9 +191,7 @@ Next, you could define a class `Contact`, which could be built with the followin
       end
 
       def wants?(email)
-        search_fields.each do |f,v|
-          return true if email[f] =~ /#{v}/
-        end
+        search_fields.any? { |f,v| email[f] =~ /#{v}/ }
       end
 
       def search_fields
