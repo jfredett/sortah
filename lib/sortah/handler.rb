@@ -28,6 +28,10 @@ module Sortah
       @lenses.clear_state!
     end
 
+    def clear_state! 
+      @lenses.clear_state!
+    end
+
     def initialize(context)
       @destinations = context.destinations
       @lenses       = context.lenses

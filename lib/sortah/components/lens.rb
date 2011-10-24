@@ -45,6 +45,5 @@ module Sortah
       mark_as_run!
       self.instance_eval &block
     end
-
   end
 end
