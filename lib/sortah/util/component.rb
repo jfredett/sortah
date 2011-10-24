@@ -7,7 +7,11 @@ module Sortah
       @opts = opts
       @block = potential_block.first if potential_block.size > 0
     end
-  
+
+    def run_dependencies!(email, context)
+      dependencies(context).each { |l| l.run!(email, context) }
+    end
+
     def defined?(context)
       !!context[name]
     end

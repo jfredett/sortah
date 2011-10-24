@@ -9,8 +9,5 @@ module Sortah
   end
 
   class Router < Component 
-    def run_dependencies!(email, context)
-      dependencies(context).each { |l| l.run!(email, context) }
-    end
   end
 end
