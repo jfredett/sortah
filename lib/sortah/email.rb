@@ -11,14 +11,8 @@ module Sortah
       super rescue nil
     end
 
-    def process(lens)
-      return unless @metadata[lens.name].nil?
-      if lens.provides_value? 
-        @metadata[lens.name] = run!(lens.block)
-      else 
-        run!(lens.block)
-        @metadata[lens.name] = :pass_through
-      end
+    def metadata(key, value)
+      @metadata[key] = value
     end
 
     private
@@ -26,14 +20,6 @@ module Sortah
     def has_data_for?(meth)
       @metadata.keys.include?(meth) and 
       @metadata[meth] != :pass_through 
-    end
-
-    def email
-      self 
-    end
-
-    def run!(block)
-      self.instance_eval &block
     end
 
     def initialize(context, metadata)
