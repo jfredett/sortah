@@ -21,8 +21,11 @@ load File.expand_path(opts[:rc])
 
 dest = sortah.sort(email).full_destination
 puts "writing email to: #{dest}" if opts[:"dry-run"] || opts[:verbose]
+
 exit 0 if opts[:"dry-run"]
 
+#no need to check for dry-run here, we would have exited otherwise
+system "mkdir -p #{dest}" 
 File.open("#{dest}/#{Digest::SHA1.hexdigest(email.to_s)}.eml", 'w') do |f|
   f << email.to_s
 end
