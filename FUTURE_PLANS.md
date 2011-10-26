@@ -1,5 +1,13 @@
 #Ideas
 
+- speed
+
+it's pretty slow, as it stands, could definitely use some speed up. Major
+improvement would be a sortah server, which could run persistently, so that
+starting/stopping a ruby vm wouldn't be necessary. Also, parallizing sortah 
+would be nice, potential for that could be batch execution or the server idea
+from above.
+
 - proxy destinations
 
 Difficulty: middling
