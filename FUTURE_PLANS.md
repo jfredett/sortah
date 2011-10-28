@@ -1,5 +1,56 @@
 #Ideas
 
+- nested destinations --- overhaul of destinations
+
+two things, first, change the way destinations are defined, eg:
+
+    maildir "/path/to/root/mail/dir/" do
+      destination :personal do
+        dir "gmail/"
+        type :maildir
+
+        destination :contact do
+          dir "contacts/" 
+          type :maildir
+
+          destination :joe
+          destination :jenn
+          destination :tim
+
+        end
+
+        destination :mailing_lists do
+          type :mbox
+          #... snip ...
+        end
+      end
+
+      #... snip ...
+
+      abs :bitbucket, "/dev/null"
+
+      proxy :search_index do
+        #code to inject into search index
+      end
+
+      #... snip ...
+    end
+
+This would make defining destinations a bit nicer, in addition to providing a
+way for multi-type mailboxen. 
+
+- 'scaffold' functionality
+
+should build all the scaffolding described by the destinations given in the
+sortah configuration
+
+- 'resource' type
+
+A resource is some block of code which returns an object which is cached, like
+lenses, a router, lens, or resource may depend on other resources. Resources
+differ from lenses in that they are not bound to an email, and -- in the event
+of multiple incoming emails, are executed only once across the whole session
+
 - speed
 
 it's pretty slow, as it stands, could definitely use some speed up. Major
