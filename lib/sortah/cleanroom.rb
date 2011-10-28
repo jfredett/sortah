@@ -10,9 +10,7 @@ module Sortah
     end
 
     def sort
-      until @pointer.is_a?(Destination) do
-        run!(@pointer) rescue FinishedExecution
-      end 
+      run!(@pointer) rescue FinishedExecution until @pointer.is_a?(Destination)
       self
     end
 
