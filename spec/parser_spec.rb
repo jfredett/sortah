@@ -15,6 +15,7 @@ describe Sortah::Parser do
         sortah.should_not be_nil
       end
 
+
       it "should parse defined 'simple' destinations"  do
         expect {
           sortah do
@@ -230,15 +231,30 @@ describe Sortah::Parser do
         sortah.maildir.should == "/home/user/.mail/personal"
       end
 
+      it "should pass over a nested #sortah block" do
+        expect { 
+          sortah do
+            sortah do
+              destination :foo, "foo/"
+
+              sortah do
+              end
+            end
+          end 
+        }.should_not raise_error
+        sortah.destinations[:foo].should == 'foo/'
+      end
     end
 
     #acceptance criteria
     it "should parse an example sortah file, which contains all of the language elements" do
       expect { 
         sortah do
-          destination :place, "somewhere"
-          destination :devnull, :abs => "/dev/null"
-          destination :bitbucket, :devnull
+          sortah do
+            destination :place, "somewhere"
+            destination :devnull, :abs => "/dev/null"
+            destination :bitbucket, :devnull
+          end
 
           lens :random_value do
             rand
