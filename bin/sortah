@@ -17,6 +17,7 @@ email = Mail.new do
   body ARGF.read
 end
 
+puts "Loading sortah rc" if opts[:verbose]
 load File.expand_path(opts[:rc])
 
 dest = sortah.sort(email).full_destination
