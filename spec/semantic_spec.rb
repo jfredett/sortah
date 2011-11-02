@@ -18,45 +18,46 @@ def basic_sortah_definition
 end
 
 describe Sortah do
+  before :all do
+    Mail.defaults do
+      delivery_method :test
+    end
+
+    @email = Mail.new do
+      to 'testa@example.com'
+      from 'chuck@nope.com'
+      subject "Taximerdizin'"
+      body <<-TXT
+        OJAI VALLEY TAXIDERMY
+
+        BET YOU THOUGHT THIS EMAIL WAS REAL
+
+        NOPE. CHUCK TESTA
+      TXT
+    end
+
+    @reply_email = Mail.new do
+      to 'chuck@nope.com'
+      from 'jgf@somewhere.com'
+      subject "Re: Taximerdizin'"
+      reply_to 'chuck@nope.com'
+      body <<-TXT
+      > OJAI VALLEY TAXIDERMY
+      >
+      > BET YOU THOUGHT THIS EMAIL WAS REAL
+      >
+      > NOPE. CHUCK TESTA
+
+      Do you taxidermize pets? 
+      TXT
+    end
+  end
+
+  before :each do
+    Sortah::Parser.clear!
+  end
+
   context "when sorting an email" do
-    before :all do
-      Mail.defaults do
-        delivery_method :test
-      end
-
-      @email = Mail.new do
-        to 'testa@example.com'
-        from 'chuck@nope.com'
-        subject "Taximerdizin'"
-        body <<-TXT
-          OJAI VALLEY TAXIDERMY
-
-          BET YOU THOUGHT THIS EMAIL WAS REAL
-
-          NOPE. CHUCK TESTA
-        TXT
-      end
-
-      @reply_email = Mail.new do
-        to 'chuck@nope.com'
-        from 'jgf@somewhere.com'
-        subject "Re: Taximerdizin'"
-        reply_to 'chuck@nope.com'
-        body <<-TXT
-        > OJAI VALLEY TAXIDERMY
-        >
-        > BET YOU THOUGHT THIS EMAIL WAS REAL
-        >
-        > NOPE. CHUCK TESTA
-
-        Do you taxidermize pets? 
-        TXT
-      end
-    end
-
-    before :each do
-      Sortah::Parser.clear!
-    end
 
     it "should provide a way to sort a single email" do
       sortah.should respond_to :sort
@@ -111,6 +112,44 @@ describe Sortah do
         sortah.sort(@reply_email).destination.should == "bar/"
       end
 
+      it "should defer to a second router using the more idiomatic ruby syntax" do
+        sortah do
+          destination :foo, "foo/"
+          destination :bar, "bar/"
+          
+          router do
+            send_to :foo if email.from.any? { |sender| sender =~ /chuck/ }
+            send_to :secondary_router
+          end
+
+          router :secondary_router do
+            send_to :bar
+          end
+        end
+        sortah.sort(@email).destination.should == "foo/"
+        sortah.sort(@reply_email).destination.should == "bar/"
+      end
+
+      it "should allow me to set local variables in a router block" do
+        sortah do
+          destination :foo, "foo/"
+          destination :bar, "bar/"
+          
+          router do
+            senders = email.from
+
+            send_to :foo if senders.any? { |sender| sender =~ /chuck/ }
+            send_to :secondary_router
+          end
+
+          router :secondary_router do
+            send_to :bar
+          end
+        end
+        sortah.sort(@email).destination.should == "foo/"
+        sortah.sort(@reply_email).destination.should == "bar/"
+      end
+      
       it "should run dependent lenses for the root router" do
         sortah do
           destination :foo, "foo/"
