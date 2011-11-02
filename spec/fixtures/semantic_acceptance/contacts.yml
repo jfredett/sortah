@@ -1,0 +1,10 @@
+--- 
+- !ruby/object:Contact 
+  destination: joe 
+  emails: 
+  - jfredett@place.com
+  - joe@other_place.com
+- !ruby/object:Contact 
+  destination: sarah 
+  emails: 
+  - sfredett@somewhere.com

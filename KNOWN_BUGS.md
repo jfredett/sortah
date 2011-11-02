@@ -11,9 +11,4 @@ if you do
 
 --------
 
-if you try to route to a destination (or router?) that doesn't exist, it hangs,
-instead of throwing an error
-
--------
-
 if you try to metaprogram routers or w/e, it doesn't actually define them.

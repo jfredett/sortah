@@ -4,13 +4,13 @@ module Sortah
   end
   
   
-  class CleanRoom < BasicObject
+  class CleanRoom < Object
     def self.sort(email, context)
       new(email, context).sort
     end
 
     def sort
-      run!(@pointer) rescue FinishedExecution until @pointer.is_a?(Destination)
+      catch(:finished_execution) { run!(@pointer) } until @pointer.is_a?(Destination)
       self
     end
 
@@ -33,7 +33,7 @@ module Sortah
 
     def send_to(dest)
       @pointer = @__context__.routers[dest] || @__context__.destinations[dest]
-      throw FinishedExecution
+      throw :finished_execution 
     end
 
     def initialize(email, context)

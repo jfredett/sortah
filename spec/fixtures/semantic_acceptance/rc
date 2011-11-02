@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+#^^ just to make syntax highlighting stick
+
+require './spec/fixtures/semantic_acceptance/contact.rb'
+
+#destinations and maildir
+sortah do
+  maildir "/Users/jfredett/.mutt/mail/"
+
+  $contacts = {}
+  $contacts[:work]     = Contacts("./spec/fixtures/semantic_acceptance/coworkers.yml")
+  $contacts[:personal] = Contacts("./spec/fixtures/semantic_acceptance/contacts.yml")
+
+  $contacts[:work].build_destinations(:work)
+  $contacts[:personal].build_destinations(:personal)
+
+  destination :unknown, 'new/'
+  destination :unknown_personal, 'personal/unknown/new'
+  destination :unknown_work, 'work/unknown/new'
+  destination :unknown_coworker, 'work/coworkers/unknown/new'
+end
+
+#routers
+sortah do 
+  router :personal do
+    contact = $contacts[:personal]
+    send_to contact.destination_for(email) if contact.want? email
+    send_to :unknown_personal 
+  end
+
+  router :work do
+    contact = $contacts[:work]
+    send_to contact.destination_for(email) if contact.want? email
+    send_to :unknown_work 
+  end
+
+  router do
+    send_to :personal if email.to.any? { |r| r =~ /jfredett@place.com/ }
+    send_to :work if email.to.any? { |r| r =~ /joe@work.com/ } 
+    send_to :unknown
+  end
+
+end

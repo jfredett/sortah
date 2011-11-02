@@ -1,0 +1,4 @@
+- !ruby/object:Contact 
+  destination: brian
+  emails: 
+    - brian@work.com

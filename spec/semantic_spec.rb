@@ -344,6 +344,32 @@ describe Sortah do
           
         end
       end
+
+    end
+
+  end
+
+  describe "acceptance" do
+    it "should be able to parse and sort using a real live example sortah definition" do
+    
+      sortah do
+        load './spec/fixtures/semantic_acceptance/rc'
+      end
+
+      personal_email = Mail.new do
+        To 'jfredett@place.com'
+        From 'sfredett@somewhere.com'
+      end
+      work_email = Mail.new do
+        To 'joe@work.com'
+        From 'brian@work.com'
+        Subject 'You get a raise, you brilliant bastard.'
+        #shuttup, I can dream.
+      end
+
+      sortah.sort(@email).destination.should == 'new/'
+      sortah.sort(personal_email).destination.should == 'personal/sarah/new/'
+      sortah.sort(work_email).destination.should == 'work/brian/new/'
     end
   end
 end
