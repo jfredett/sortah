@@ -13,9 +13,7 @@ end
 puts "Dry-run mode" if opts[:"dry-run"]
 
 puts "Reading mail" if opts[:verbose]
-email = Mail.new do
-  body ARGF.read
-end
+email = Mail.new(ARGF.read) 
 
 puts "Loading sortah rc" if opts[:verbose]
 load File.expand_path(opts[:rc])
