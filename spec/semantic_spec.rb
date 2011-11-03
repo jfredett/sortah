@@ -357,13 +357,14 @@ describe Sortah do
       end
 
       personal_email = Mail.new do
-        To 'jfredett@place.com'
-        From 'sfredett@somewhere.com'
+        to 'jfredett@place.com'
+        from 'sfredett@somewhere.com'
       end
+
       work_email = Mail.new do
-        To 'joe@work.com'
-        From 'brian@work.com'
-        Subject 'You get a raise, you brilliant bastard.'
+        to 'joe@work.com'
+        from 'brian@work.com'
+        subject 'You get a raise, you brilliant bastard.'
         #shuttup, I can dream.
       end
 
