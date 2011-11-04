@@ -2,9 +2,6 @@ require 'spec_helper'
 
 describe Sortah::Handler do
   context "when building the handler" do
-    before :all do
-    end
-
     it "should ask for the parsed content" do
       context = mock(:context)
       context.should_receive(:destinations).and_return(instance_of(Sortah::Destinations))
@@ -16,7 +13,5 @@ describe Sortah::Handler do
       Sortah::Handler.build_from(context)
     end
   end
-
-
 end
 
