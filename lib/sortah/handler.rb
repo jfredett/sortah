@@ -12,7 +12,7 @@ module Sortah
       self
     end
 
-    attr_reader :destinations, :lenses, :routers, :maildir
+    attr_reader :destinations, :lenses, :routers, :maildir, :error_dest
 
     def metadata(key)
       @result.metadata(key)
@@ -24,6 +24,10 @@ module Sortah
 
     def full_destination
       maildir + destination.to_s
+    end
+
+    def full_error_destination
+      maildir + error_dest.to_s
     end
 
     private
@@ -40,6 +44,7 @@ module Sortah
       @destinations = context.destinations
       @lenses       = context.lenses
       @routers      = context.routers
+      @error_dest   = context.error_dest
       @maildir      = context.maildir
     end
   end

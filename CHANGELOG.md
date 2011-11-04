@@ -1,3 +1,14 @@
+##11/04/11
+
+### IMPROVEMENTS
+
+- Rather than dumping error-causing emails into the vast oblivion, sortah now
+  puts them in the directory specified by the `#error_dest` method 
+
+### ADDITIONS
+
+- added `#error_dest` to the main sortah file
+
 ##11/02/11
 
 ### BUG FIXES

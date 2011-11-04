@@ -1,8 +1,10 @@
 sortah do
   maildir '/tmp/.mail/'
+  error_dest 'errors/'
   destination :foo, 'foo/'
 
   router do
+    raise RuntimeException if email.from && email.from.any? { |e| e =~ /fail/ }
     send_to :foo
   end
 end

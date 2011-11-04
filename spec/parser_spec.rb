@@ -15,7 +15,6 @@ describe Sortah::Parser do
         sortah.should_not be_nil
       end
 
-
       it "should parse defined 'simple' destinations"  do
         expect {
           sortah do
@@ -198,6 +197,20 @@ describe Sortah::Parser do
     end
 
     context "when dealing in general with sortah, " do
+      it "should parse an 'error_dest' clause" do
+        expect {
+          sortah do
+            error_dest 'errors/'
+          end
+        }.should_not raise_error
+      end
+
+      it "error_dest should provide access via a #error_dest method" do
+        sortah do
+          error_dest 'errors/'
+        end
+        sortah.error_dest.should == "errors/"
+      end
 
       it "should maintain one state across multiple sortah blocks" do
         expect {

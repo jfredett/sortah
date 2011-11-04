@@ -18,7 +18,12 @@ email = Mail.new(ARGF.read)
 puts "Loading sortah rc" if opts[:verbose]
 load File.expand_path(opts[:rc])
 
-dest = sortah.sort(email).full_destination
+begin
+  dest = sortah.sort(email).full_destination
+rescue
+  STDERR.puts "DELIVERY ERROR: #{$!.message}"
+  dest = sortah.full_error_destination
+end
 puts "writing email to: #{dest}" if opts[:"dry-run"] || opts[:verbose]
 
 exit 0 if opts[:"dry-run"]

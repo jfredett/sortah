@@ -1,7 +1,7 @@
 def run_with(arg, email = "")
   #uses the sortah defn in spec/fixtures/rc
   cmd =<<-CMD
-bundle exec bin/sortah #{arg} --rc "spec/fixtures/rc" <<-EMAIL
+bundle exec bin/sortah #{arg} --rc "spec/fixtures/rc" 2>/dev/null <<-EMAIL
 #{email}
 EMAIL
 CMD
@@ -20,6 +20,19 @@ describe "the sortah executable" do
     @email = Mail.new do
       to 'testa@example.com'
       from 'chuck@nope.com'
+      subject "Taximerdizin'"
+      body <<-TXT
+          OJAI VALLEY TAXIDERMY
+
+          BET YOU THOUGHT THIS EMAIL WAS REAL
+
+          NOPE. CHUCK TESTA
+      TXT
+    end
+
+    @failing_email = Mail.new do
+      to 'fail@example.com'
+      from 'fail@nope.com'
       subject "Taximerdizin'"
       body <<-TXT
           OJAI VALLEY TAXIDERMY
@@ -49,6 +62,10 @@ describe "the sortah executable" do
 
     it "should print to STDOUT the location it intends to write the file" do
       run_with('--dry-run', @email.to_s)[:result].should =~ %r|writing email to: /tmp/\.mail/foo/|
+    end
+
+    it "should write to the destination specified by #error_dest when an exception is raised during sorting" do
+      run_with('--dry-run', @failing_email.to_s)[:result].should =~ %r|writing email to: /tmp/\.mail/errors/|
     end
   end
 end

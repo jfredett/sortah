@@ -41,6 +41,12 @@ module Sortah
       @maildir
     end
 
+    #double-duty getter/setter
+    def error_dest(dest = nil)
+      @error_dest = dest if dest
+      @error_dest
+    end
+
     ## language elements
     def destination(name, args)
       @destinations << Destination.new(name, args)
