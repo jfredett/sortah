@@ -18,6 +18,22 @@ email = Mail.new(ARGF.read)
 puts "Loading sortah rc" if opts[:verbose]
 load File.expand_path(opts[:rc])
 
+if sortah.type == :maildir 
+  puts "detected maildir format, building maildir directories." if opts[:verbose]
+  maildir = sortah.maildir
+  puts "creating: #{maildir}/#{dest}/{tmp,cur,new}" if opts[:verbose]
+  unless opts[:"dry-run"]
+    sortah.destinations.values.each do |dest|
+      puts dest
+       
+      system "mkdir -p #{maildir}/#{dest}/tmp" 
+      system "mkdir -p #{maildir}/#{dest}/cur"
+      system "mkdir -p #{maildir}/#{dest}/new" 
+    end
+  end
+end
+
+
 begin
   dest = sortah.sort(email).full_destination
 rescue
@@ -26,10 +42,14 @@ rescue
 end
 puts "writing email to: #{dest}" if opts[:"dry-run"] || opts[:verbose]
 
+if sortah.type == :maildir
+  puts "adjusting destination to maildir style" if opts[:verbose]
+  dest = dest + "new" 
+end
+
 exit 0 if opts[:"dry-run"]
 
 #no need to check for dry-run here, we would have exited otherwise
-system "mkdir -p #{dest}" 
 File.open("#{dest}/#{Digest::SHA1.hexdigest(email.to_s)}.eml", 'w') do |f|
   f << email.to_s
 end

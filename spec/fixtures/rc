@@ -1,6 +1,7 @@
 sortah do
   maildir '/tmp/.mail/'
   error_dest 'errors/'
+  type :maildir
   destination :foo, 'foo/'
 
   router do

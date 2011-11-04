@@ -197,6 +197,21 @@ describe Sortah::Parser do
     end
 
     context "when dealing in general with sortah, " do
+      it "should parse a 'type' clause" do
+        expect {
+          sortah do 
+            type :maildir
+          end
+        }.should_not raise_error
+      end
+
+      it "should provide an inspection method to determine the maildir type" do
+        sortah do 
+          type :maildir
+        end
+        sortah.type.should == :maildir 
+      end
+
       it "should parse an 'error_dest' clause" do
         expect {
           sortah do

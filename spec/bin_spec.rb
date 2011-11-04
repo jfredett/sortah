@@ -69,6 +69,10 @@ describe "the sortah executable" do
       run_with('--dry-run', @failing_email.to_s)[:result].
         should =~ %r|writing email to: /tmp/\.mail/errors/|
     end
+
+    it "should try to create maildir directories if the maildir type is maildir" do
+      run_with('--dry-run --verbose', @failing_email.to_s)[:result].
+        should =~ %r|detected maildir format, building maildir directories.|
     end
   end
 end

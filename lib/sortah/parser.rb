@@ -47,6 +47,12 @@ module Sortah
       @error_dest
     end
 
+    #double-duty getter/setter
+    def type(type = nil)
+      @type = type if type
+      @type
+    end
+
     ## language elements
     def destination(name, args)
       @destinations << Destination.new(name, args)

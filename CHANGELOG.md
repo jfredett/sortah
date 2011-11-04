@@ -2,6 +2,12 @@
 
 ### IMPROVEMENTS
 
+- if you specify "type :maildir" in the sortah rc file, then sortah will
+  automatically scaffold your destinations into maildir directories (eg, it'll
+  `mkdir -p #{maildir}/#{dest}/{cur,new,tmp}` your destinations), and it will
+  automatically write any new mail into the `/new` subdirectory of your
+  destination.
+
 - Rather than dumping error-causing emails into the vast oblivion, sortah now
   puts them in the directory specified by the `#error_dest` method 
 

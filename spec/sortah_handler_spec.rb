@@ -9,6 +9,7 @@ describe Sortah::Handler do
       context.should_receive(:routers).and_return(instance_of(Sortah::Routers))
       context.should_receive(:maildir).and_return(instance_of(String))
       context.should_receive(:error_dest).and_return(instance_of(String))
+      context.should_receive(:type).and_return(instance_of(Symbol))
 
       Sortah::Handler.build_from(context)
     end
