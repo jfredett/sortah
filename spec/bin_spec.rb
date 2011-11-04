@@ -61,11 +61,14 @@ describe "the sortah executable" do
     end
 
     it "should print to STDOUT the location it intends to write the file" do
-      run_with('--dry-run', @email.to_s)[:result].should =~ %r|writing email to: /tmp/\.mail/foo/|
+      run_with('--dry-run', @email.to_s)[:result].
+        should =~ %r|writing email to: /tmp/\.mail/foo/|
     end
 
     it "should write to the destination specified by #error_dest when an exception is raised during sorting" do
-      run_with('--dry-run', @failing_email.to_s)[:result].should =~ %r|writing email to: /tmp/\.mail/errors/|
+      run_with('--dry-run', @failing_email.to_s)[:result].
+        should =~ %r|writing email to: /tmp/\.mail/errors/|
+    end
     end
   end
 end
