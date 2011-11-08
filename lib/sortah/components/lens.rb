@@ -21,8 +21,8 @@ module Sortah
 
     def run!(email, context)
       @email = email
-      run_dependencies!(email, context)
       return if already_ran?
+      run_dependencies!(email, context)
       result = run_block!
       email.metadata(name, result) if provides_value?
     end
