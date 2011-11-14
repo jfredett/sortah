@@ -15,6 +15,10 @@ module Sortah
   class Destination
     attr_reader :name, :path
 
+    def self.dynamic(path)
+      Destination.new(nil, path)
+    end
+
     def initialize(name, path)
       @name = name
       @path = if path.class == Hash then path[:abs] else path end

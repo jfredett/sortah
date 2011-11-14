@@ -32,7 +32,11 @@ module Sortah
     end
 
     def send_to(dest)
-      @pointer = @__context__.routers[dest] || @__context__.destinations[dest]
+      @pointer = if dest.is_a? Hash
+        Destination.dynamic(dest[:dynamic])
+      else
+        @__context__.routers[dest] || @__context__.destinations[dest]
+      end
       throw :finished_execution 
     end
 

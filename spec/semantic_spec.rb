@@ -74,20 +74,16 @@ describe Sortah do
     end
 
     describe "#sort" do
-      it "should return an object which responds to #destination" do
-        basic_sortah_definition
-        sortah.sort(@email).should respond_to :destination
-      end
+      context "when using sortah#sort, " do
+        subject { basic_sortah_definition; sortah.sort(@email) }
+        it { should respond_to :destination }
+        it { should respond_to :metadata } 
 
-      it "should return an object which responds to #metadata" do
-        basic_sortah_definition
-        sortah.sort(@email).should respond_to :metadata
-      end
-      
-      it "should sort emails based on the sortah definitions" do
-        basic_sortah_definition
-        sortah.sort(@email).destination.should == "foo/"
-        sortah.sort(@reply_email).destination.should == "bar/"
+        subject { basic_sortah_definition; sortah }
+        it "should sort emails based on the sortah definitions" do
+          subject.sort(@email).destination.should == "foo/"
+          subject.sort(@reply_email).destination.should == "bar/"
+        end
       end
 
       it "should defer to a second router if it is sent to one" do
@@ -341,7 +337,16 @@ describe Sortah do
             end
           end
           sortah.sort(@email).full_destination.should == "/tmp/foo/"
-          
+        end
+
+        it "should return the correct path when using a dynamic destination" do
+          sortah do
+            maildir '/tmp/'
+            router do
+              send_to :dynamic => "foo.bar.baz"
+            end
+          end
+          sortah.sort(@email).full_destination.should == "/tmp/foo.bar.baz"
         end
       end
 
