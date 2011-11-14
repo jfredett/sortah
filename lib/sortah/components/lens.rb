@@ -22,6 +22,8 @@ module Sortah
     def run!(email, context)
       @email = email
       return if already_ran?
+      #XXX: this can be moved to the cleanroom, then the mark_as_run! can be put
+      #after the appropriate 
       run_dependencies!(email, context)
       result = run_block!
       email.metadata(name, result) if provides_value?
