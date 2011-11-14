@@ -373,9 +373,17 @@ describe Sortah do
         #shuttup, I can dream.
       end
 
+      dynamic_email = Mail.new do
+        to 'joe@work.com'
+        from 'dynamic@work.com'
+        subject 'this is a dynamic email'
+        #shuttup, I can dream.
+      end
+
       sortah.sort(@email).destination.should == 'new/'
       sortah.sort(personal_email).destination.should == 'personal/sarah/new/'
       sortah.sort(work_email).destination.should == 'work/brian/new/'
+      sortah.sort(dynamic_email).destination.should == 'bar'
     end
   end
 end

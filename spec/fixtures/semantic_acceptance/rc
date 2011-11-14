@@ -35,6 +35,7 @@ sortah do
   end
 
   router do
+    send_to :dynamic => "bar" if email.from && email.from.any? { |e| e =~ /dynamic/ }
     send_to :personal if email.to.any? { |r| r =~ /jfredett@place.com/ }
     send_to :work if email.to.any? { |r| r =~ /joe@work.com/ } 
     send_to :unknown

@@ -6,6 +6,7 @@ sortah do
 
   router do
     raise RuntimeException if email.from && email.from.any? { |e| e =~ /fail/ }
+    send_to :dynamic => "bar" if email.from && email.from.any? { |e| e =~ /dynamic/ }
     send_to :foo
   end
 end
