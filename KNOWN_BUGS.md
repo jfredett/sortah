@@ -12,3 +12,12 @@ if you do
 --------
 
 if you try to metaprogram routers or w/e, it doesn't actually define them.
+
+--------
+
+I think :abs destinations are handled poorly, and there is some problems of
+logic location wrt destination handling
+
+--------
+
+The sorting logic should get centralized in cleanroom

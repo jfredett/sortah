@@ -1,3 +1,16 @@
+##11/14/11
+
+### IMPROVEMENTS
+
+- added "dynamic" destinations. If you do:
+
+    send_to dynamic: "path/to/your/dynamic/dest"
+
+  sortah will append it to the given maildir with all the usual treatment
+  (maildir support, mostly), useful for dynamically handling things like
+  mailinglists (which is the impetus for creating this).
+
+
 ##11/04/11
 
 ### IMPROVEMENTS
