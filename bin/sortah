@@ -3,6 +3,8 @@ require 'trollop'
 require 'sortah'
 require 'digest/sha1'
 
+#encoding: utf8
+
 opts = Trollop::options do
   banner 'Sortah'
   opt :rc, "path to your sortah files", :default => "#{ENV['HOME']}/.sortahrc"
