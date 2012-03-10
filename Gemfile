@@ -6,5 +6,8 @@ gem 'rspec'
 gem 'rake'
 gem 'pry', :require => 'pry'
 
+gem 'rubydeps', '0.9.2.pre'
+
+
 # Specify your gem's dependencies in sortah.gemspec
 gemspec
