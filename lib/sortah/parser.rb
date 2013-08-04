@@ -11,7 +11,7 @@ module Sortah
 
     ##object-level interaction
     attr_reader :destinations, :lenses, :routers
-    
+
     def clear!
       @destinations = Destinations.new
       @lenses = Lenses.new
@@ -32,7 +32,7 @@ module Sortah
       @routers.valid?
       @destinations.valid?
     end
-   
+
     ## metadata/config data
 
     #double-duty getter/setter
